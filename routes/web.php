@@ -1,7 +1,14 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,12 +28,24 @@ Route::middleware('guest')->group(function () {
         ->name('admin.login.store');
 });
 
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
 
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
 
-    Route::post('/logout', [AuthController::class, 'logout'])
-        ->name('admin.logout');
-});
+        Route::get('/dashboard', function () {
+            return view('admin.dashboard');
+        })->name('dashboard');
+
+        Route::resource('categories', CategoryController::class)
+            ->except(['show']);
+
+        Route::post('/logout', [AuthController::class, 'logout'])
+            ->name('logout');
+    });

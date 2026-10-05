@@ -1,75 +1,57 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@extends('admin.layouts.app')
 
-    <title>Dashboard Admin — TanjungKatalog</title>
+@section('title', 'Dashboard')
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
+@section('content')
 
-<body class="min-h-screen bg-[#F5F2EB]">
+<div class="mb-8">
+    <h2 class="text-2xl font-bold">
+        Halo, {{ auth()->user()->name }} 👋
+    </h2>
 
-    <nav class="bg-white border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <p class="text-gray-500 mt-1">
+        Selamat datang di Admin TanjungKatalog.
+    </p>
+</div>
 
-            <div>
-                <h1 class="font-bold text-[#326AAB]">
-                    TanjungKatalog
-                </h1>
+<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-                <p class="text-xs text-gray-500">
-                    Admin Dashboard
-                </p>
-            </div>
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
 
-            <form method="POST" action="{{ route('admin.logout') }}">
-                @csrf
-
-                <button
-                    type="submit"
-                    class="text-sm text-gray-600 hover:text-red-600"
-                >
-                    Logout
-                </button>
-            </form>
-
-        </div>
-    </nav>
-
-    <main class="max-w-7xl mx-auto px-6 py-10">
-
-        <h2 class="text-2xl font-bold text-gray-900">
-            Halo, {{ auth()->user()->name }} 👋
-        </h2>
-
-        <p class="text-gray-600 mt-1">
-            Selamat datang di Admin TanjungKatalog.
+        <p class="text-sm text-gray-500">
+            Total UMKM
         </p>
 
-        <div class="grid md:grid-cols-3 gap-6 mt-8">
+        <p class="text-3xl font-bold mt-2">
+            0
+        </p>
 
-            <div class="bg-white rounded-2xl p-6 shadow-sm">
-                <p class="text-sm text-gray-500">Total UMKM</p>
-                <p class="text-3xl font-bold mt-2">0</p>
-            </div>
+    </div>
 
-            <div class="bg-white rounded-2xl p-6 shadow-sm">
-                <p class="text-sm text-gray-500">Total Produk</p>
-                <p class="text-3xl font-bold mt-2">0</p>
-            </div>
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
 
-            <div class="bg-white rounded-2xl p-6 shadow-sm">
-                <p class="text-sm text-gray-500">Status</p>
-                <p class="text-3xl font-bold mt-2 text-green-600">
-                    Aktif
-                </p>
-            </div>
+        <p class="text-sm text-gray-500">
+            Total Produk
+        </p>
 
-        </div>
+        <p class="text-3xl font-bold mt-2">
+            0
+        </p>
 
-    </main>
+    </div>
 
-</body>
-</html>
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+
+        <p class="text-sm text-gray-500">
+            Kategori
+        </p>
+
+        <p class="text-3xl font-bold mt-2">
+            {{ \App\Models\Category::count() }}
+        </p>
+
+    </div>
+
+</div>
+
+@endsection

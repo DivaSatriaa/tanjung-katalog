@@ -49,7 +49,7 @@ class AuthController extends Controller
             ]);
         }
 
-        return redirect()->intended(route('admin.dashboard'));
+        return redirect()->route('admin.dashboard');
     }
 
     /**
