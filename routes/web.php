@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UmkmController;
+use App\Http\Controllers\Admin\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +46,12 @@ Route::middleware(['auth', 'admin'])
         })->name('dashboard');
 
         Route::resource('categories', CategoryController::class)
+            ->except(['show']);
+
+        Route::resource('umkms', UmkmController::class)
+            ->except(['show']);
+            
+        Route::resource('products', ProductController::class)
             ->except(['show']);
 
         Route::post('/logout', [AuthController::class, 'logout'])

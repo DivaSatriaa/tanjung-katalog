@@ -43,15 +43,15 @@
                 </a>
 
                 <a
-                    href="#"
-                    class="block px-4 py-3 rounded-xl text-sm font-medium text-gray-400 cursor-not-allowed"
+                    href="{{ route('admin.umkms.index') }}"
+                    class="block px-4 py-3 rounded-xl text-sm font-medium hover:bg-gray-100"
                 >
                     UMKM
                 </a>
 
                 <a
-                    href="#"
-                    class="block px-4 py-3 rounded-xl text-sm font-medium text-gray-400 cursor-not-allowed"
+                    href="{{route('admin.products.index')}}"
+                    class="block px-4 py-3 rounded-xl text-sm font-medium hover:bg-gray-100"
                 >
                     Produk
                 </a>
