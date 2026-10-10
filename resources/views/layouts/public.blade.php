@@ -16,44 +16,60 @@
 
 <body class="min-h-screen bg-[#F5F2EB] text-gray-800 antialiased">
 
-    <header class="sticky top-0 z-40 border-b border-gray-200/70 bg-[#F5F2EB]/95 backdrop-blur">
-        <div class="mx-auto flex max-w-7xl items-center justify-between gap-5 px-5 py-4 lg:px-8">
+    <header class="sticky top-0 z-40 border-b border-gray-100 bg-white/95 backdrop-blur">
+    <div class="flex w-full items-center justify-between gap-6 px-5 py-3 sm:px-7 lg:px-10 xl:px-12">
 
-            <a href="{{ route('home') }}" class="shrink-0">
-                <span class="block text-xl font-extrabold tracking-tight text-[#326AAB]">
-                    TanjungKatalog
-                </span>
+        {{-- Logo --}}
+        <a href="{{ route('home') }}" class="shrink-0">
+            <img
+                src="{{ asset('images/tanjungkatalog-logo.png') }}"
+                alt="TanjungKatalog — Katalog UMKM Kelurahan Tanjung Mas"
+                class="h-auto w-48 object-contain sm:w-60"
+            >
+        </a>
 
-                <span class="mt-0.5 block text-xs text-gray-500">
-                    UMKM Kelurahan Tanjung Mas
-                </span>
+        {{-- Navigasi Desktop --}}
+        <nav class="hidden items-center gap-6 text-sm font-medium lg:flex">
+            <a href="{{ route('home') }}"
+               class="text-[#326AAB]">
+                Beranda
             </a>
 
-            <nav class="flex items-center gap-5 text-sm font-medium sm:gap-7">
-                <a
-                    href="{{ route('home') }}"
-                    class="text-[#326AAB] hover:text-[#28598f]"
-                >
-                    Beranda
-                </a>
+            <a href="{{ route('umkm.index') }}"
+               class="text-gray-600 transition hover:text-[#326AAB]">
+                UMKM
+            </a>
 
-                <a
-                    href="{{ route('umkm.index') }}"
-                    class="text-gray-600 transition hover:text-[#326AAB]"
-                >
-                    UMKM
-                </a>
+            <a href="{{ route('home') }}#tentang"
+               class="text-gray-600 transition hover:text-[#326AAB]">
+                Tentang
+            </a>
+        </nav>
 
-                <a
-                    href="{{ route('home') }}#tentang"
-                    class="hidden text-gray-600 transition hover:text-[#326AAB] sm:inline"
-                >
-                    Tentang
-                </a>
-            </nav>
+        {{-- Search --}}
+        <form
+            method="GET"
+            action="{{ route('umkm.index') }}"
+            class="hidden min-w-0 max-w-xs flex-1 xl:flex"
+        >
+            <input
+                type="search"
+                name="q"
+                placeholder="Cari UMKM..."
+                class="w-full rounded-full border-0 bg-[#F5F2EB] px-4 py-2.5 text-sm outline-none ring-1 ring-transparent transition focus:ring-[#326AAB]"
+            >
+        </form>
 
-        </div>
-    </header>
+        {{-- Tombol Admin --}}
+        <a
+            href="{{ route('admin.login') }}"
+            class="shrink-0 rounded-full bg-[#326AAB] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#28598f]"
+        >
+            Masuk
+        </a>
+
+    </div>
+</header>
 
     <main>
         @yield('content')

@@ -4,104 +4,237 @@
 
 @section('content')
 
-{{-- Hero --}}
-<section class="overflow-hidden">
-    <div class="mx-auto grid max-w-7xl items-center gap-12 px-5 py-16 md:grid-cols-2 md:py-24 lg:px-8">
+{{-- Hero Section --}}
+<section class="bg-[#F5F2EB] px-5 py-6 sm:py-8">
+    <div class="w-full max-w-none">
 
-        <div>
-            <span class="inline-flex items-center rounded-full bg-[#CFE5E2] px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#326AAB]">
-                UMKM Lokal · Tanjung Mas
-            </span>
+        {{-- Main Hero Card --}}
+        <div class="relative overflow-hidden rounded-3xl border border-[#CFE5E2] bg-gradient-to-br from-[#F8FCFD] via-[#EAF4F7] to-[#CFE5E2] shadow-[0_12px_40px_rgba(50,106,171,0.12)]">
 
-            <h1 class="mt-6 max-w-xl text-4xl font-extrabold leading-tight tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
-                Temukan Produk Lokal,
-                <span class="text-[#326AAB]">Dukung Usaha Tanjung Mas.</span>
-            </h1>
+            <div class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[#6EA8C7]/20 blur-3xl"></div>
 
-            <p class="mt-6 max-w-lg text-base leading-7 text-gray-600">
-                Jelajahi usaha dan produk lokal dari pelaku UMKM di Kelurahan
-                Tanjung Mas, Semarang.
-            </p>
+           <div class="relative grid items-center gap-8 px-6 py-8 sm:px-10 sm:py-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8 lg:px-12 lg:py-10 xl:px-14 xl:py-12">
 
-            <form
-                method="GET"
-                action="{{ route('umkm.index') }}"
-                class="mt-8 flex max-w-lg flex-col gap-3 sm:flex-row"
-            >
-                <input
-                    type="search"
-                    name="q"
-                    placeholder="Cari nama UMKM..."
-                    class="min-w-0 flex-1 rounded-xl border border-gray-200 bg-white px-4 py-3.5 outline-none transition focus:border-[#326AAB] focus:ring-2 focus:ring-[#326AAB]/20"
+            {{-- Headline --}}
+            <div class="relative z-10">
+
+                <span class="inline-flex items-center gap-2 rounded-full border border-[#CFE5E2] bg-white/80 px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#326AAB]">
+                    <span class="h-2 w-2 rounded-full bg-[#6EA8C7]"></span>
+                    Katalog UMKM Tanjung Mas
+                </span>
+
+                <h1 class="mt-6 max-w-2xl text-4xl font-extrabold leading-[1.12] tracking-tight text-[#174875] sm:text-5xl xl:text-6xl">
+                    Dukung UMKM,
+                    <span class="mt-1 block bg-gradient-to-r from-[#326AAB] to-[#6EA8C7] bg-clip-text text-transparent">
+                        Majukan Tanjung Mas
+                    </span>
+                </h1>
+
+                <p class="mt-6 max-w-lg text-base leading-7 text-gray-600 sm:text-lg">
+                    Temukan berbagai produk unggulan UMKM di Kelurahan
+                    Tanjung Mas. Mari dukung produk lokal untuk ekonomi
+                    yang lebih kuat.
+                </p>
+
+                {{-- Search --}}
+                <form
+                    method="GET"
+                    action="{{ route('umkm.index') }}"
+                    class="mt-8 flex max-w-lg items-center gap-2 rounded-2xl border border-gray-200 bg-white p-2 shadow-sm focus-within:border-[#6EA8C7] focus-within:ring-2 focus-within:ring-[#6EA8C7]/20"
                 >
-
-                <button
-                    type="submit"
-                    class="rounded-xl bg-[#326AAB] px-6 py-3.5 font-semibold text-white transition hover:bg-[#28598f]"
-                >
-                    Cari UMKM
-                </button>
-            </form>
-
-            <a
-                href="{{ route('umkm.index') }}"
-                class="mt-5 inline-flex text-sm font-semibold text-[#326AAB] hover:underline"
-            >
-                Jelajahi semua UMKM →
-            </a>
-        </div>
-
-        {{-- Hero Visual --}}
-        <div class="relative">
-            <div class="absolute -right-8 -top-8 h-40 w-40 rounded-full bg-[#CFE5E2]/70 blur-2xl"></div>
-            <div class="absolute -bottom-8 -left-8 h-40 w-40 rounded-full bg-[#6EA8C7]/20 blur-2xl"></div>
-
-            <div class="relative overflow-hidden rounded-[2rem] bg-[#326AAB] p-8 text-white sm:p-12">
-                <div class="absolute -right-16 -top-12 h-64 w-64 rounded-full border-[35px] border-white/10"></div>
-
-                <div class="relative">
-                    <span class="text-sm font-medium text-white/75">
-                        Potensi Ekonomi Lokal
+                    <span class="pl-3 text-[#326AAB]" aria-hidden="true">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="21"
+                            height="21"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
                     </span>
 
-                    <h2 class="mt-4 text-3xl font-bold leading-tight sm:text-4xl">
-                        Dari usaha lokal,
-                        untuk masa depan yang lebih baik.
-                    </h2>
+                    <input
+                        type="search"
+                        name="q"
+                        placeholder="Cari UMKM atau nama usaha..."
+                        class="min-w-0 flex-1 border-0 bg-transparent px-2 py-3 text-sm outline-none focus:ring-0"
+                    >
 
-                    <p class="mt-4 max-w-sm leading-7 text-white/80">
-                        Kenali pelaku usaha, temukan produknya, dan hubungi
-                        pemilik usaha secara langsung.
-                    </p>
+                    <button
+                        type="submit"
+                        class="shrink-0 rounded-xl bg-[#326AAB] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#28598f]"
+                    >
+                        Cari
+                    </button>
+                </form>
 
-                    <div class="mt-10 grid grid-cols-2 gap-4">
+                {{-- CTA --}}
+                <div class="mt-5 flex flex-wrap gap-3">
 
-                        <div class="rounded-2xl border border-white/15 bg-white/10 p-5">
-                            <p class="text-3xl font-bold">
-                                {{ $totalUmkms }}
-                            </p>
+                    <a
+                        href="{{ route('umkm.index') }}"
+                        class="inline-flex items-center justify-center gap-2 rounded-full bg-[#326AAB] px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-[#326AAB]/20 transition hover:-translate-y-0.5 hover:bg-[#28598f]"
+                    >
+                        Lihat Katalog
 
-                            <p class="mt-2 text-sm text-white/75">
-                                UMKM terpublikasi
-                            </p>
-                        </div>
+                        <span aria-hidden="true">→</span>
+                    </a>
 
-                        <div class="rounded-2xl border border-white/15 bg-white/10 p-5">
-                            <p class="text-3xl font-bold">
-                                {{ $totalProducts }}
-                            </p>
+                    <a
+                        href="#kategori"
+                        class="inline-flex items-center justify-center rounded-full border border-[#326AAB] bg-white/70 px-6 py-3.5 text-sm font-semibold text-[#326AAB] transition hover:bg-[#CFE5E2]/50"
+                    >
+                        Jelajahi Kategori
+                    </a>
 
-                            <p class="mt-2 text-sm text-white/75">
-                                Produk terpublikasi
-                            </p>
-                        </div>
+                </div>
+
+            </div>
+
+            {{-- Hero Image --}}
+            <div class="relative mx-auto w-full max-w-xl lg:max-w-none">
+
+                <div class="absolute -right-5 -top-5 h-32 w-32 rounded-full bg-[#6EA8C7]/30 blur-3xl"></div>
+                <div class="absolute -bottom-6 -left-5 h-36 w-36 rounded-full bg-[#CFE5E2] blur-2xl"></div>
+
+                <div class="relative overflow-hidden rounded-[2rem] bg-[#CFE5E2]">
+
+                    <img
+                        src="{{ asset('images/tanjung-mas-hero.jpg') }}"
+                        alt="Ilustrasi kawasan pesisir dan perahu nelayan"
+                        class="h-[300px] w-full object-cover sm:h-[360px] lg:h-[390px] xl:h-[420px]"
+                    >
+
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#174875]/70 via-transparent to-transparent"></div>
+
+                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white sm:p-8">
+
+                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-white/80">
+                            Potensi Lokal
+                        </p>
+
+                        <h2 class="mt-2 text-2xl font-bold sm:text-3xl">
+                            Produk Lokal, Kekuatan Kita.
+                        </h2>
+
+                        <p class="mt-2 max-w-md text-sm leading-6 text-white/85">
+                            Kenali pelaku usaha dan temukan produk lokal
+                            kebanggaan Tanjung Mas.
+                        </p>
 
                     </div>
+
+                </div>
+
+                {{-- Floating statistics --}}
+                <div class="relative mx-4 -mt-7 grid grid-cols-2 gap-3 sm:absolute sm:-bottom-6 sm:left-6 sm:right-6 sm:mx-0 sm:mt-0">
+
+                    <div class="rounded-2xl border border-white/80 bg-white/95 p-4 shadow-lg backdrop-blur">
+                        <p class="text-2xl font-extrabold text-[#326AAB]">
+                            {{ $totalUmkms }}
+                        </p>
+
+                        <p class="mt-1 text-xs font-medium text-gray-500 sm:text-sm">
+                            UMKM terpublikasi
+                        </p>
+                    </div>
+
+                    <div class="rounded-2xl border border-white/80 bg-white/95 p-4 shadow-lg backdrop-blur">
+                        <p class="text-2xl font-extrabold text-[#326AAB]">
+                            {{ $totalProducts }}
+                        </p>
+
+                        <p class="mt-1 text-xs font-medium text-gray-500 sm:text-sm">
+                            Produk terpublikasi
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            </div> {{-- Grid konten --}}
+
+            {{-- Keunggulan --}}
+            <div class="relative z-10 border-t border-white/70 bg-white/25 px-5 py-7 sm:px-8 lg:px-10">
+                <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
+
+                    {{-- Katalog --}}
+                    <div class="px-2 py-2 text-center">
+                        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-white/80 text-[#326AAB]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 9.5 12 4l9 5.5"/>
+                                <path d="M5 10v10h14V10"/>
+                                <path d="M9 20v-6h6v6"/>
+                            </svg>
+                        </div>
+                        <h3 class="mt-3 font-bold text-[#174875]">Katalog Lengkap</h3>
+                        <p class="mx-auto mt-2 max-w-44 text-xs leading-5 text-gray-500 sm:text-sm">
+                            Temukan profil dan produk UMKM Tanjung Mas.
+                        </p>
+                    </div>
+
+                    {{-- Lokasi --}}
+                    <div class="px-2 py-2 text-center">
+                        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-white/80 text-[#326AAB]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
+                                <circle cx="12" cy="10" r="2.5"/>
+                            </svg>
+                        </div>
+                        <h3 class="mt-3 font-bold text-[#174875]">Peta Lokasi</h3>
+                        <p class="mx-auto mt-2 max-w-44 text-xs leading-5 text-gray-500 sm:text-sm">
+                            Kenali lokasi usaha dengan mudah.
+                        </p>
+                    </div>
+
+                    {{-- Produk --}}
+                    <div class="px-2 py-2 text-center">
+                        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-white/80 text-[#326AAB]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/>
+                            </svg>
+                        </div>
+                        <h3 class="mt-3 font-bold text-[#174875]">Produk Unggulan</h3>
+                        <p class="mx-auto mt-2 max-w-44 text-xs leading-5 text-gray-500 sm:text-sm">
+                            Lihat produk pilihan dari UMKM lokal.
+                        </p>
+                    </div>
+
+                    {{-- Dukung Lokal --}}
+                    <div class="px-2 py-2 text-center">
+                        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-white/80 text-[#326AAB]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="10" cy="7" r="4"/>
+                                <path d="M20 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <h3 class="mt-3 font-bold text-[#174875]">Dukung Lokal</h3>
+                        <p class="mx-auto mt-2 max-w-44 text-xs leading-5 text-gray-500 sm:text-sm">
+                            Bersama memajukan ekonomi warga.
+                        </p>
+                    </div>
+
                 </div>
             </div>
-        </div>
-
-    </div>
+        </div> {{-- Main Hero Card --}}
+    </div> {{-- Container --}}
 </section>
 
 {{-- Kategori --}}
