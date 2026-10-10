@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UmkmController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,10 +14,13 @@ use App\Http\Controllers\Admin\ProductController;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
+Route::get('/umkm', [CatalogController::class, 'index'])
+    ->name('umkm.index');
+
+Route::get('/umkm/{umkm:slug}', [CatalogController::class, 'show'])
+    ->name('umkm.show');
 /*
 |--------------------------------------------------------------------------
 | Admin Authentication
