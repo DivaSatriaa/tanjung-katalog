@@ -98,42 +98,41 @@
             </div>
 
             {{-- Hero Image --}}
-            <div class="relative mx-auto w-full max-w-xl lg:max-w-none">
+            <div class="relative mx-auto w-full max-w-xl pb-7 lg:max-w-none">
 
-                <div class="absolute -right-5 -top-5 h-32 w-32 rounded-full bg-[#6EA8C7]/30 blur-3xl"></div>
-                <div class="absolute -bottom-6 -left-5 h-36 w-36 rounded-full bg-[#CFE5E2] blur-2xl"></div>
+                <div class="pointer-events-none absolute -right-5 -top-5 h-32 w-32 rounded-full bg-[#6EA8C7]/25 blur-3xl"></div>
 
-                <div class="relative overflow-hidden rounded-[2rem] bg-[#CFE5E2]">
+                <div class="relative overflow-hidden rounded-[2rem] rounded-tl-[5rem] border border-white/70 bg-[#CFE5E2] shadow-lg shadow-[#326AAB]/10">
 
                     <img
                         src="{{ asset('images/tanjung-mas-hero.jpg') }}"
-                        alt="Ilustrasi kawasan pesisir dan perahu nelayan"
-                        class="h-[300px] w-full object-cover sm:h-[360px] lg:h-[390px] xl:h-[420px]"
+                        alt="Pemandangan kawasan pelabuhan Tanjung Mas, Semarang"
+                        class="h-[320px] w-full object-cover sm:h-[380px] lg:h-[410px] xl:h-[440px]"
                     >
 
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#174875]/70 via-transparent to-transparent"></div>
+                    {{-- Overlay agar teks tetap terbaca --}}
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#174875]/80 via-[#174875]/10 to-transparent"></div>
 
-                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white sm:p-8">
+                    {{-- Caption --}}
+                    <div class="absolute inset-x-0 bottom-0 px-6 pb-24 pt-10 sm:px-8 sm:pb-24">
 
-                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-white/80">
+                        <p class="text-xs font-bold uppercase tracking-[0.2em] text-white/80">
                             Potensi Lokal
                         </p>
 
-                        <h2 class="mt-2 text-2xl font-bold sm:text-3xl">
+                        <h2 class="mt-2 text-xl font-bold text-white sm:text-2xl">
                             Produk Lokal, Kekuatan Kita.
                         </h2>
 
-                        <p class="mt-2 max-w-md text-sm leading-6 text-white/85">
-                            Kenali pelaku usaha dan temukan produk lokal
-                            kebanggaan Tanjung Mas.
+                        <p class="mt-2 max-w-md text-sm leading-5 text-white/85">
+                            Kenali pelaku usaha dan temukan produk lokal kebanggaan Tanjung Mas.
                         </p>
 
                     </div>
-
                 </div>
 
-                {{-- Floating statistics --}}
-                <div class="relative mx-4 -mt-7 grid grid-cols-2 gap-3 sm:absolute sm:-bottom-6 sm:left-6 sm:right-6 sm:mx-0 sm:mt-0">
+                {{-- Statistik dinamis --}}
+                <div class="absolute inset-x-4 bottom-0 grid grid-cols-2 gap-3 sm:inset-x-6">
 
                     <div class="rounded-2xl border border-white/80 bg-white/95 p-4 shadow-lg backdrop-blur">
                         <p class="text-2xl font-extrabold text-[#326AAB]">
@@ -159,10 +158,8 @@
 
             </div>
 
-            </div> {{-- Grid konten --}}
-
             {{-- Keunggulan --}}
-            <div class="relative z-10 border-t border-white/70 bg-white/25 px-5 py-7 sm:px-8 lg:px-10">
+            <div class="relative z-10 w-full lg:col-span-2 border-t border-white/70 bg-white/25 px-5 py-7 sm:px-8 lg:px-10">
                 <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
 
                     {{-- Katalog --}}
