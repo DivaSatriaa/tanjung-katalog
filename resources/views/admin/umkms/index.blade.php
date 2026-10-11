@@ -31,6 +31,98 @@
     </div>
 @endif
 
+
+{{-- Pencarian dan filter UMKM --}}
+<form
+    method="GET"
+    action="{{ route('admin.umkms.index') }}"
+    class="mb-6 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm"
+>
+    <div class="grid items-end gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+        {{-- Pencarian --}}
+        <div class="lg:col-span-2">
+            <label for="q" class="mb-2 block text-sm font-medium text-gray-700">
+                Cari UMKM
+            </label>
+
+            <input
+                id="q"
+                name="q"
+                type="search"
+                value="{{ $search }}"
+                placeholder="Nama UMKM atau nama pemilik..."
+                class="w-full rounded-xl border-gray-300 px-4 py-3 focus:border-[#326AAB] focus:ring-[#326AAB]"
+            >
+        </div>
+
+        {{-- Filter kategori --}}
+        <div>
+            <label for="category_id" class="mb-2 block text-sm font-medium text-gray-700">
+                Kategori
+            </label>
+
+            <select
+                id="category_id"
+                name="category_id"
+                class="w-full rounded-xl border-gray-300 px-4 py-3 focus:border-[#326AAB] focus:ring-[#326AAB]"
+            >
+                <option value="">Semua kategori</option>
+
+                @foreach ($categories as $category)
+                    <option
+                        value="{{ $category->id }}"
+                        @selected((string) $categoryId === (string) $category->id)
+                    >
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- Filter status --}}
+        <div>
+            <label for="status" class="mb-2 block text-sm font-medium text-gray-700">
+                Status publikasi
+            </label>
+
+            <select
+                id="status"
+                name="status"
+                class="w-full rounded-xl border-gray-300 px-4 py-3 focus:border-[#326AAB] focus:ring-[#326AAB]"
+            >
+                <option value="">Semua status</option>
+
+                <option value="published" @selected($status === 'published')>
+                    Published
+                </option>
+
+                <option value="draft" @selected($status === 'draft')>
+                    Draft
+                </option>
+            </select>
+        </div>
+
+    </div>
+
+    <div class="mt-5 flex flex-wrap gap-3">
+        <button
+            type="submit"
+            class="rounded-xl bg-[#326AAB] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#28598f]"
+        >
+            Cari & Filter
+        </button>
+
+        <a
+            href="{{ route('admin.umkms.index') }}"
+            class="rounded-xl border border-gray-300 px-5 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+        >
+            Reset
+        </a>
+    </div>
+</form>
+
+
 <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
 
     <div class="overflow-x-auto">
@@ -170,39 +262,53 @@
 
                     </tr>
 
+               
                 @empty
-
                     <tr>
-
-                        <td
-                            colspan="5"
-                            class="px-6 py-16 text-center"
-                        >
-
-                            <div class="text-4xl mb-3">
-                                🏪
+                        <td colspan="5" class="px-6 py-16 text-center">
+                            <div class="mb-3 text-4xl">
+                                @if ($search !== '' || $categoryId !== '' || $status !== '')
+                                    🔎
+                                @else
+                                    🏪
+                                @endif
                             </div>
 
-                            <p class="font-medium text-gray-900">
-                                Belum ada UMKM
-                            </p>
+                            @if ($search !== '' || $categoryId !== '' || $status !== '')
+                                <p class="font-medium text-gray-900">
+                                    Tidak ada UMKM yang cocok
+                                </p>
 
-                            <p class="text-sm text-gray-500 mt-1">
-                                Tambahkan UMKM pertama untuk mulai mengisi katalog.
-                            </p>
+                                <p class="mt-1 text-sm text-gray-500">
+                                    Coba ubah kata kunci, kategori, atau status publikasi.
+                                </p>
 
-                            <a
-                                href="{{ route('admin.umkms.create') }}"
-                                class="inline-flex mt-5 rounded-xl bg-[#326AAB] px-5 py-3 text-sm font-medium text-white hover:bg-[#28598f]"
-                            >
-                                + Tambah UMKM
-                            </a>
+                                <a
+                                    href="{{ route('admin.umkms.index') }}"
+                                    class="mt-5 inline-flex rounded-xl bg-[#326AAB] px-5 py-3 text-sm font-medium text-white hover:bg-[#28598f]"
+                                >
+                                    Reset Pencarian
+                                </a>
+                            @else
+                                <p class="font-medium text-gray-900">
+                                    Belum ada UMKM
+                                </p>
 
+                                <p class="mt-1 text-sm text-gray-500">
+                                    Tambahkan UMKM pertama untuk mulai mengisi katalog.
+                                </p>
+
+                                <a
+                                    href="{{ route('admin.umkms.create') }}"
+                                    class="mt-5 inline-flex rounded-xl bg-[#326AAB] px-5 py-3 text-sm font-medium text-white hover:bg-[#28598f]"
+                                >
+                                    + Tambah UMKM
+                                </a>
+                            @endif
                         </td>
-
                     </tr>
-
                 @endforelse
+
 
             </tbody>
 
@@ -211,5 +317,11 @@
     </div>
 
 </div>
+
+@if ($umkms->hasPages())
+    <div class="mt-6">
+        {{ $umkms->links() }}
+    </div>
+@endif
 
 @endsection

@@ -16,13 +16,40 @@ class ProductController extends Controller
     /**
      * Display all products.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $products = Product::with('umkm')
-            ->latest()
-            ->paginate(10);
+        $validated = $request->validate([
+            'q' => ['nullable', 'string', 'max:150'],
+            'umkm_id' => ['nullable', 'integer', 'exists:umkms,id'],
+            'status' => ['nullable', 'in:draft,published'],
+        ]);
 
-        return view('admin.products.index', compact('products'));
+        $search = trim($validated['q'] ?? '');
+        $umkmId = $validated['umkm_id'] ?? '';
+        $status = $validated['status'] ?? '';
+
+        $query = Product::with('umkm')
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->when($umkmId !== '', function ($query) use ($umkmId) {
+                $query->where('umkm_id', $umkmId);
+            })
+            ->when($status !== '', function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->latest();
+
+        $products = $query->paginate(10)->withQueryString();
+        $umkms = Umkm::orderBy('name')->get();
+
+        return view('admin.products.index', compact(
+            'products',
+            'umkms',
+            'search',
+            'umkmId',
+            'status'
+        ));
     }
 
     /**

@@ -16,15 +16,47 @@ class UmkmController extends Controller
     /**
      * Display a listing of UMKM.
      */
-    public function index(): View
-    {
-        $umkms = Umkm::with('category')
-            ->withCount('products')
-            ->latest()
-            ->get();
 
-        return view('admin.umkms.index', compact('umkms'));
+    public function index(Request $request): View
+    {
+        $validated = $request->validate([
+            'q' => ['nullable', 'string', 'max:150'],
+            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
+            'status' => ['nullable', 'in:draft,published'],
+        ]);
+
+        $search = trim($validated['q'] ?? '');
+        $categoryId = $validated['category_id'] ?? '';
+        $status = $validated['status'] ?? '';
+
+        $query = Umkm::with('category')
+            ->withCount('products')
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('owner_name', 'like', "%{$search}%");
+                });
+            })
+            ->when($categoryId !== '', function ($query) use ($categoryId) {
+                $query->where('category_id', $categoryId);
+            })
+            ->when($status !== '', function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->latest();
+
+        $umkms = $query->paginate(10)->withQueryString();
+        $categories = Category::orderBy('name')->get();
+
+        return view('admin.umkms.index', compact(
+            'umkms',
+            'categories',
+            'search',
+            'categoryId',
+            'status'
+        ));
     }
+
 
     /**
      * Show the form for creating a new UMKM.

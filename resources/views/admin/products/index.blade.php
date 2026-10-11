@@ -33,6 +33,98 @@
     </div>
 @endif
 
+
+{{-- Pencarian dan filter produk --}}
+<form
+    method="GET"
+    action="{{ route('admin.products.index') }}"
+    class="mb-6 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm"
+>
+    <div class="grid items-end gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+        {{-- Pencarian nama produk --}}
+        <div class="lg:col-span-2">
+            <label for="q" class="mb-2 block text-sm font-medium text-gray-700">
+                Cari Produk
+            </label>
+
+            <input
+                id="q"
+                name="q"
+                type="search"
+                value="{{ $search }}"
+                placeholder="Masukkan nama produk..."
+                class="w-full rounded-xl border-gray-300 px-4 py-3 focus:border-[#326AAB] focus:ring-[#326AAB]"
+            >
+        </div>
+
+        {{-- Filter UMKM --}}
+        <div>
+            <label for="umkm_id" class="mb-2 block text-sm font-medium text-gray-700">
+                Pemilik UMKM
+            </label>
+
+            <select
+                id="umkm_id"
+                name="umkm_id"
+                class="w-full rounded-xl border-gray-300 px-4 py-3 focus:border-[#326AAB] focus:ring-[#326AAB]"
+            >
+                <option value="">Semua UMKM</option>
+
+                @foreach ($umkms as $umkm)
+                    <option
+                        value="{{ $umkm->id }}"
+                        @selected((string) $umkmId === (string) $umkm->id)
+                    >
+                        {{ $umkm->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- Filter status --}}
+        <div>
+            <label for="status" class="mb-2 block text-sm font-medium text-gray-700">
+                Status Publikasi
+            </label>
+
+            <select
+                id="status"
+                name="status"
+                class="w-full rounded-xl border-gray-300 px-4 py-3 focus:border-[#326AAB] focus:ring-[#326AAB]"
+            >
+                <option value="">Semua status</option>
+
+                <option value="published" @selected($status === 'published')>
+                    Published
+                </option>
+
+                <option value="draft" @selected($status === 'draft')>
+                    Draft
+                </option>
+            </select>
+        </div>
+
+    </div>
+
+    <div class="mt-5 flex flex-wrap gap-3">
+        <button
+            type="submit"
+            class="rounded-xl bg-[#326AAB] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#28598f]"
+        >
+            Cari & Filter
+        </button>
+
+        <a
+            href="{{ route('admin.products.index') }}"
+            class="rounded-xl border border-gray-300 px-5 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+        >
+            Reset
+        </a>
+    </div>
+</form>
+
+
 <div class="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
     <div class="overflow-x-auto">
         <table class="min-w-full">
@@ -137,28 +229,49 @@
                             </div>
                         </td>
                     </tr>
+                
                 @empty
                     <tr>
                         <td colspan="5" class="px-6 py-16 text-center">
-                            <div class="mb-3 text-4xl">📦</div>
+                            @if ($search !== '' || $umkmId !== '' || $status !== '')
+                                <div class="mb-3 text-4xl">🔎</div>
 
-                            <p class="font-medium text-gray-900">
-                                Belum ada produk
-                            </p>
+                                <p class="font-medium text-gray-900">
+                                    Tidak ada produk yang cocok
+                                </p>
 
-                            <p class="mt-1 text-sm text-gray-500">
-                                Tambahkan produk pertama untuk mulai mengisi katalog.
-                            </p>
+                                <p class="mt-1 text-sm text-gray-500">
+                                    Coba ubah kata kunci, UMKM, atau status publikasi.
+                                </p>
 
-                            <a
-                                href="{{ route('admin.products.create') }}"
-                                class="mt-5 inline-flex rounded-xl bg-[#326AAB] px-5 py-3 text-sm font-medium text-white hover:bg-[#28598f]"
-                            >
-                                + Tambah Produk
-                            </a>
+                                <a
+                                    href="{{ route('admin.products.index') }}"
+                                    class="mt-5 inline-flex rounded-xl bg-[#326AAB] px-5 py-3 text-sm font-medium text-white hover:bg-[#28598f]"
+                                >
+                                    Reset Pencarian
+                                </a>
+                            @else
+                                <div class="mb-3 text-4xl">📦</div>
+
+                                <p class="font-medium text-gray-900">
+                                    Belum ada produk
+                                </p>
+
+                                <p class="mt-1 text-sm text-gray-500">
+                                    Tambahkan produk pertama untuk mulai mengisi katalog.
+                                </p>
+
+                                <a
+                                    href="{{ route('admin.products.create') }}"
+                                    class="mt-5 inline-flex rounded-xl bg-[#326AAB] px-5 py-3 text-sm font-medium text-white hover:bg-[#28598f]"
+                                >
+                                    + Tambah Produk
+                                </a>
+                            @endif
                         </td>
                     </tr>
                 @endforelse
+
             </tbody>
         </table>
     </div>
