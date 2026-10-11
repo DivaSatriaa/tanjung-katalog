@@ -7,6 +7,7 @@
     <title>@yield('title', 'Admin') — TanjungKatalog</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('styles')
 </head>
 
 <body class="min-h-screen bg-[#F5F2EB] text-gray-900">
@@ -123,5 +124,6 @@
 
     </div>
 
+    @stack('scripts')
 </body>
 </html>
