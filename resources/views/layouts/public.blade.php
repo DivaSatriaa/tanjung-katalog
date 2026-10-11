@@ -12,6 +12,7 @@
     >
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('styles')
 </head>
 
 <body class="min-h-screen bg-[#F5F2EB] text-gray-800 antialiased">
@@ -38,6 +39,13 @@
             <a href="{{ route('umkm.index') }}"
                class="text-gray-600 transition hover:text-[#326AAB]">
                 UMKM
+            </a>
+
+            <a
+                href="{{ route('peta.index') }}"
+                class="text-gray-600 transition hover:text-[#326AAB]"
+            >
+                Peta
             </a>
 
             <a href="{{ route('home') }}#tentang"
@@ -93,5 +101,6 @@
         </div>
     </footer>
 
+    @stack('scripts')
 </body>
 </html>

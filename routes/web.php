@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\UmkmController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MapController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,9 @@ Route::get('/umkm', [CatalogController::class, 'index'])
 
 Route::get('/umkm/{umkm:slug}', [CatalogController::class, 'show'])
     ->name('umkm.show');
+
+Route::get('/peta', [MapController::class, 'index'])->name('peta.index');
+
 /*
 |--------------------------------------------------------------------------
 | Admin Authentication
