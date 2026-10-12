@@ -254,6 +254,139 @@
         </div>
     </div>
 
+
+@push('styles')
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+    <style>
+        #umkm-coordinate-map {
+            height: 360px;
+            width: 100%;
+            border-radius: 12px;
+            z-index: 0;
+        }
+    </style>
+@endpush
+
+{{-- Pemilih koordinat --}}
+<div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+    <h3 class="mb-2 text-lg font-semibold">Pilih Lokasi dari Peta</h3>
+
+    <p class="mb-4 text-sm text-gray-500">
+        Klik lokasi yang sesuai untuk mengisi koordinat otomatis.
+        Kamu juga bisa menggeser pin untuk menyesuaikan posisi.
+    </p>
+
+    <div id="umkm-coordinate-map"></div>
+
+    <p class="mt-3 text-xs text-gray-500">
+        Peta menggunakan OpenStreetMap. Pastikan pin sesuai dengan
+        lokasi usaha yang sebenarnya.
+    </p>
+</div>
+
+@push('scripts')
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        (() => {
+            const mapElement = document.getElementById('umkm-coordinate-map');
+            const latInput = document.getElementById('latitude');
+            const lngInput = document.getElementById('longitude');
+
+            if (!mapElement || !latInput || !lngInput || typeof L === 'undefined') {
+                return;
+            }
+
+            function readCoordinates() {
+                const latText = latInput.value.trim();
+                const lngText = lngInput.value.trim();
+
+                if (latText === '' || lngText === '') {
+                    return null;
+                }
+
+                const lat = Number(latText);
+                const lng = Number(lngText);
+
+                if (
+                    !Number.isFinite(lat) ||
+                    !Number.isFinite(lng) ||
+                    lat < -90 || lat > 90 ||
+                    lng < -180 || lng > 180
+                ) {
+                    return null;
+                }
+
+                return [lat, lng];
+            }
+
+            const existingCoordinates = readCoordinates();
+
+            const map = L.map(mapElement).setView(
+                existingCoordinates || [-6.95, 110.42],
+                existingCoordinates ? 16 : 12
+            );
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            let marker = null;
+
+            function placeMarker(coordinates, recenter = false) {
+                if (!marker) {
+                    marker = L.marker(coordinates, {
+                        draggable: true
+                    }).addTo(map);
+
+                    marker.on('dragend', () => {
+                        const position = marker.getLatLng();
+
+                        latInput.value = position.lat.toFixed(7);
+                        lngInput.value = position.lng.toFixed(7);
+                    });
+                } else {
+                    marker.setLatLng(coordinates);
+                }
+
+                if (recenter) {
+                    map.setView(coordinates, 16);
+                }
+            }
+
+            map.on('click', (event) => {
+                const lat = event.latlng.lat;
+                const lng = event.latlng.lng;
+
+                latInput.value = lat.toFixed(7);
+                lngInput.value = lng.toFixed(7);
+
+                placeMarker([lat, lng]);
+            });
+
+            function syncFromInputs() {
+                const coordinates = readCoordinates();
+
+                if (coordinates) {
+                    placeMarker(coordinates, true);
+                }
+            }
+
+            latInput.addEventListener('change', syncFromInputs);
+            lngInput.addEventListener('change', syncFromInputs);
+
+            if (existingCoordinates) {
+                placeMarker(existingCoordinates);
+            }
+        })();
+    </script>
+@endpush
+
+
     {{-- Foto --}}
     <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
         <h3 class="mb-6 text-lg font-semibold">Foto UMKM</h3>

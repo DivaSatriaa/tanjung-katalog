@@ -234,230 +234,482 @@
     </div> {{-- Container --}}
 </section>
 
-{{-- Kategori --}}
-<section class="mx-auto max-w-7xl px-5 py-8 lg:px-8" id="kategori">
 
-    <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+
+{{-- Kategori UMKM --}}
+<section id="kategori" class="mx-auto max-w-7xl px-5 py-14 lg:px-8">
+
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
             <p class="text-sm font-bold uppercase tracking-wider text-[#326AAB]">
                 Jelajahi
             </p>
 
-            <h2 class="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl">
-                Cari berdasarkan kategori
+            <h2 class="mt-2 text-2xl font-extrabold text-[#174875] sm:text-3xl">
+                Temukan berdasarkan kategori
             </h2>
+
+            <p class="mt-2 text-sm leading-6 text-gray-500 sm:text-base">
+                Jelajahi berbagai jenis usaha dan produk lokal Tanjung Mas.
+            </p>
         </div>
 
         <a
             href="{{ route('umkm.index') }}"
-            class="text-sm font-semibold text-[#326AAB] hover:underline"
+            class="inline-flex items-center gap-2 text-sm font-semibold text-[#326AAB] transition hover:gap-3"
         >
-            Semua kategori →
+            Lihat semua UMKM <span>→</span>
         </a>
     </div>
 
-    <div class="mt-7 flex flex-wrap gap-3">
+    @php
+        $categoryIcons = [
+            'makanan & minuman' => '🍲',
+            'makanan' => '🍲',
+            'minuman' => '🥤',
+            'kerajinan' => '🧺',
+            'fashion' => '👕',
+            'perikanan' => '🐟',
+            'pertanian' => '🌿',
+            'jasa' => '🛠️',
+            'lainnya' => '•••',
+        ];
+    @endphp
+
+    <div class="mt-7 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
 
         @forelse ($categories as $category)
             <a
                 href="{{ route('umkm.index', ['category' => $category->slug]) }}"
-                class="rounded-full border border-gray-200 bg-white px-5 py-3 text-sm font-medium transition hover:border-[#326AAB] hover:bg-[#326AAB] hover:text-white"
+                class="group rounded-2xl border border-gray-100 bg-white p-5 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#CFE5E2] hover:shadow-lg"
             >
-                {{ $category->name }}
 
-                <span class="ml-1 text-xs opacity-70">
-                    {{ $category->umkms_count }}
-                </span>
+                <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#CFE5E2]/60 text-3xl transition group-hover:bg-[#326AAB]/10">
+                    {{ $categoryIcons[strtolower($category->name)] ?? '🏪' }}
+                </div>
+
+                <h3 class="mt-4 text-sm font-bold text-[#174875] transition group-hover:text-[#326AAB]">
+                    {{ $category->name }}
+                </h3>
+
+                <p class="mt-2 text-xs text-gray-500">
+                    {{ $category->umkms_count }} UMKM
+                </p>
+
             </a>
         @empty
-            <p class="text-sm text-gray-500">
-                Kategori belum tersedia.
-            </p>
+            <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-8 sm:col-span-3 lg:col-span-6">
+                <p class="font-semibold text-gray-800">
+                    Kategori belum tersedia.
+                </p>
+
+                <p class="mt-2 text-sm text-gray-500">
+                    Kategori dapat ditambahkan melalui dashboard administrator.
+                </p>
+            </div>
         @endforelse
 
     </div>
 
 </section>
 
-{{-- UMKM Pilihan --}}
-<section class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
 
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+
+{{-- UMKM Pilihan --}}
+<section class="mx-auto max-w-7xl px-5 py-14 lg:px-8">
+
+    {{-- Section Header --}}
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+
         <div>
-            <p class="text-sm font-bold uppercase tracking-wider text-[#326AAB]">
-                Kenali Usahanya
+            <p class="text-sm font-bold uppercase tracking-[0.15em] text-[#326AAB]">
+                Kenali Usaha Lokal
             </p>
 
-            <h2 class="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl">
-                UMKM pilihan
+            <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-[#174875] sm:text-3xl">
+                UMKM Pilihan
             </h2>
 
-            <p class="mt-2 text-gray-500">
-                Temukan usaha lokal dan produk yang mereka tawarkan.
+            <p class="mt-2 max-w-xl text-sm leading-6 text-gray-500 sm:text-base">
+                Kenali para pelaku usaha dan temukan produk lokal kebanggaan Tanjung Mas.
             </p>
         </div>
 
         <a
             href="{{ route('umkm.index') }}"
-            class="text-sm font-semibold text-[#326AAB] hover:underline"
+            class="inline-flex w-fit shrink-0 items-center gap-2 text-sm font-semibold text-[#326AAB] transition hover:gap-3"
         >
-            Lihat semua UMKM →
+            Lihat semua UMKM
+            <span aria-hidden="true">→</span>
         </a>
+
     </div>
 
+    {{-- UMKM Cards --}}
     <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 
         @forelse ($featuredUmkms as $umkm)
-            <article class="group overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
 
-                <a href="{{ route('umkm.show', $umkm->slug) }}" class="block">
-                    <div class="aspect-[16/10] overflow-hidden bg-[#CFE5E2]">
+            <article class="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#CFE5E2] hover:shadow-xl">
+
+                {{-- Cover Image --}}
+                <a
+                    href="{{ route('umkm.show', $umkm->slug) }}"
+                    class="relative block overflow-hidden"
+                >
+                    <div class="aspect-[4/3] overflow-hidden bg-gradient-to-br from-[#EAF4F7] to-[#CFE5E2]">
 
                         @if ($umkm->cover_image)
                             <img
                                 src="{{ asset('storage/' . $umkm->cover_image) }}"
-                                alt="{{ $umkm->name }}"
+                                alt="Foto {{ $umkm->name }}"
+                                loading="lazy"
                                 class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                             >
                         @else
-                            <div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#CFE5E2] to-[#6EA8C7]/50">
-                                <span class="text-5xl">🏪</span>
+                            <div class="flex h-full w-full flex-col items-center justify-center text-[#326AAB]">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="52"
+                                    height="52"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.3"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <path d="M3 9.5 12 4l9 5.5"/>
+                                    <path d="M5 10v10h14V10"/>
+                                    <path d="M9 20v-6h6v6"/>
+                                </svg>
+
+                                <span class="mt-3 text-sm font-medium">
+                                    Foto UMKM
+                                </span>
                             </div>
                         @endif
 
                     </div>
-                </a>
 
-                <div class="p-5">
-
-                    <div class="flex items-center justify-between gap-3">
-                        <span class="rounded-full bg-[#CFE5E2] px-3 py-1 text-xs font-semibold text-[#326AAB]">
+                    {{-- Category Badge --}}
+                    <div class="absolute left-4 top-4">
+                        <span class="inline-flex rounded-full border border-white/70 bg-white/95 px-3 py-1.5 text-xs font-semibold text-[#326AAB] shadow-sm backdrop-blur">
                             {{ $umkm->category->name }}
-                        </span>
-
-                        <span class="text-xs text-gray-400">
-                            {{ $umkm->products_count }} produk
                         </span>
                     </div>
 
-                    <h3 class="mt-4 text-lg font-bold text-gray-900">
-                        <a
-                            href="{{ route('umkm.show', $umkm->slug) }}"
-                            class="transition hover:text-[#326AAB]"
-                        >
+                    {{-- Featured Badge --}}
+                    @if ($umkm->is_featured)
+                        <div class="absolute right-4 top-4">
+                            <span class="inline-flex items-center gap-1 rounded-full bg-[#326AAB] px-3 py-1.5 text-xs font-semibold text-white shadow-sm">
+                                <span aria-hidden="true">★</span>
+                                Unggulan
+                            </span>
+                        </div>
+                    @endif
+
+                </a>
+
+                {{-- Card Content --}}
+                <div class="flex flex-1 flex-col p-5">
+
+                    <h3 class="text-lg font-bold leading-snug text-[#174875] transition group-hover:text-[#326AAB]">
+                        <a href="{{ route('umkm.show', $umkm->slug) }}">
                             {{ $umkm->name }}
                         </a>
                     </h3>
 
-                    <p class="mt-2 line-clamp-2 text-sm leading-6 text-gray-500">
-                        {{ $umkm->description ?: 'Kenali usaha lokal dari Kelurahan Tanjung Mas.' }}
+                    <p class="mt-2 line-clamp-3 flex-1 text-sm leading-6 text-gray-500">
+                        {{ $umkm->description ?: 'Profil dan informasi usaha lokal dari Kelurahan Tanjung Mas.' }}
+                    </p>
+
+                    {{-- Location --}}
+                    @if ($umkm->address)
+                        <div class="mt-4 flex items-start gap-2 text-sm text-gray-500">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="17"
+                                height="17"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="mt-0.5 shrink-0 text-[#6EA8C7]"
+                            >
+                                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/>
+                                <circle cx="12" cy="10" r="2.5"/>
+                            </svg>
+
+                            <span class="line-clamp-2">
+                                {{ $umkm->address }}
+                            </span>
+                        </div>
+                    @endif
+
+                    {{-- Footer --}}
+                    <div class="mt-5 flex items-center justify-between gap-3 border-t border-gray-100 pt-4">
+
+                        <div>
+                            <p class="text-lg font-bold text-[#326AAB]">
+                                {{ $umkm->products_count }}
+                            </p>
+
+                            <p class="text-xs text-gray-500">
+                                Produk tersedia
+                            </p>
+                        </div>
+
+                        <a
+                            href="{{ route('umkm.show', $umkm->slug) }}"
+                            class="inline-flex items-center gap-2 rounded-full border border-[#326AAB]/30 px-4 py-2.5 text-sm font-semibold text-[#326AAB] transition hover:border-[#326AAB] hover:bg-[#326AAB] hover:text-white"
+                        >
+                            Lihat Detail
+                            <span aria-hidden="true">→</span>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        @empty
+
+            <div class="rounded-2xl border border-dashed border-[#CFE5E2] bg-white p-8 sm:col-span-2 lg:col-span-3">
+                <div class="mx-auto max-w-md py-5 text-center">
+
+                    <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#CFE5E2]/60 text-[#326AAB]">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="32"
+                            height="32"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M3 9.5 12 4l9 5.5"/>
+                            <path d="M5 10v10h14V10"/>
+                            <path d="M9 20v-6h6v6"/>
+                        </svg>
+                    </div>
+
+                    <h3 class="mt-5 text-lg font-bold text-[#174875]">
+                        UMKM pilihan segera hadir
+                    </h3>
+
+                    <p class="mt-2 text-sm leading-6 text-gray-500">
+                        UMKM akan ditampilkan di sini setelah data usaha siap dan dipublikasikan.
                     </p>
 
                     <a
-                        href="{{ route('umkm.show', $umkm->slug) }}"
-                        class="mt-5 inline-flex text-sm font-semibold text-[#326AAB] hover:underline"
+                        href="{{ route('umkm.index') }}"
+                        class="mt-5 inline-flex items-center gap-2 font-semibold text-[#326AAB] hover:underline"
                     >
-                        Lihat profil →
+                        Jelajahi katalog
+                        <span aria-hidden="true">→</span>
                     </a>
 
                 </div>
-            </article>
-        @empty
-            <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-8 sm:col-span-2 lg:col-span-3">
-                <p class="font-semibold text-gray-800">
-                    Belum ada UMKM yang dipublikasikan.
-                </p>
-
-                <p class="mt-2 text-sm leading-6 text-gray-500">
-                    UMKM yang masih berstatus Draft tidak akan ditampilkan di sini.
-                    Publikasikan data melalui dashboard admin setelah datanya siap.
-                </p>
             </div>
+
         @endforelse
 
     </div>
 
 </section>
 
+
 {{-- Produk Terbaru --}}
-<section class="bg-white py-16">
+<section class="bg-white py-14 sm:py-16">
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
 
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        {{-- Section Header --}}
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-                <p class="text-sm font-bold uppercase tracking-wider text-[#326AAB]">
+                <p class="text-sm font-bold uppercase tracking-[0.15em] text-[#326AAB]">
                     Produk Lokal
                 </p>
 
-                <h2 class="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl">
-                    Produk terbaru
+                <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-[#174875] sm:text-3xl">
+                    Produk Terbaru
                 </h2>
+
+                <p class="mt-2 max-w-xl text-sm leading-6 text-gray-500 sm:text-base">
+                    Temukan produk pilihan dari pelaku UMKM Kelurahan Tanjung Mas.
+                </p>
             </div>
 
             <a
                 href="{{ route('umkm.index') }}"
-                class="text-sm font-semibold text-[#326AAB] hover:underline"
+                class="inline-flex w-fit shrink-0 items-center gap-2 text-sm font-semibold text-[#326AAB] transition hover:gap-3"
             >
-                Jelajahi UMKM →
+                Jelajahi katalog
+                <span aria-hidden="true">→</span>
             </a>
         </div>
 
-        <div class="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+        {{-- Product Cards --}}
+        <div class="mt-8 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
 
             @forelse ($latestProducts as $product)
-                <article class="overflow-hidden rounded-2xl border border-gray-100 bg-[#F5F2EB]/50">
 
-                    <div class="aspect-square overflow-hidden bg-[#CFE5E2]">
+                <article class="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#CFE5E2] hover:shadow-lg">
 
-                        @if ($product->image)
-                            <img
-                                src="{{ asset('storage/' . $product->image) }}"
-                                alt="{{ $product->name }}"
-                                class="h-full w-full object-cover"
-                            >
-                        @else
-                            <div class="flex h-full w-full items-center justify-center">
-                                <span class="text-4xl">📦</span>
-                            </div>
+                    {{-- Product Image --}}
+                    <a
+                        href="{{ route('umkm.show', $product->umkm->slug) }}"
+                        class="relative block overflow-hidden"
+                        aria-label="Lihat UMKM {{ $product->umkm->name }}"
+                    >
+                        <div class="aspect-square overflow-hidden bg-gradient-to-br from-[#EAF4F7] to-[#CFE5E2]">
+
+                            @if ($product->image)
+                                <img
+                                    src="{{ asset('storage/' . $product->image) }}"
+                                    alt="{{ $product->name }}"
+                                    loading="lazy"
+                                    class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                                >
+                            @else
+                                <div class="flex h-full w-full flex-col items-center justify-center text-[#326AAB]">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="44"
+                                        height="44"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.4"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <path d="m3 7 9-4 9 4-9 5-9-5Z"/>
+                                        <path d="M3 7v10l9 5 9-5V7"/>
+                                        <path d="M12 12v10"/>
+                                    </svg>
+
+                                    <span class="mt-2 text-xs font-medium">
+                                        Foto produk
+                                    </span>
+                                </div>
+                            @endif
+
+                        </div>
+
+                        {{-- Featured Badge --}}
+                        @if ($product->is_featured)
+                            <span class="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-[#326AAB] shadow-sm">
+                                ★ Pilihan
+                            </span>
                         @endif
+                    </a>
 
-                    </div>
+                    {{-- Product Information --}}
+                    <div class="flex flex-1 flex-col p-4 sm:p-5">
 
-                    <div class="p-4">
-                        <h3 class="line-clamp-2 font-semibold text-gray-900">
-                            {{ $product->name }}
-                        </h3>
-
-                        <p class="mt-1 text-xs text-gray-500">
+                        <p class="line-clamp-1 text-xs font-medium text-gray-500">
                             {{ $product->umkm->name }}
                         </p>
 
-                        <p class="mt-3 font-bold text-[#326AAB]">
-                            @if ($product->price !== null)
-                                Rp{{ number_format((float) $product->price, 0, ',', '.') }}
-                            @else
-                                Hubungi penjual
-                            @endif
-                        </p>
+                        <h3 class="mt-2 line-clamp-2 text-sm font-bold leading-5 text-[#174875] transition group-hover:text-[#326AAB] sm:text-base sm:leading-6">
+                            <a href="{{ route('umkm.show', $product->umkm->slug) }}">
+                                {{ $product->name }}
+                            </a>
+                        </h3>
+
+                        @if ($product->description)
+                            <p class="mt-2 line-clamp-2 text-xs leading-5 text-gray-500 sm:text-sm">
+                                {{ $product->description }}
+                            </p>
+                        @endif
+
+                        <div class="mt-auto pt-5">
+
+                            <div class="border-t border-gray-100 pt-4">
+                                <p class="text-xs text-gray-400">
+                                    Harga
+                                </p>
+
+                                <p class="mt-1 text-base font-extrabold text-[#326AAB] sm:text-lg">
+                                    @if ($product->price !== null)
+                                        Rp{{ number_format((float) $product->price, 0, ',', '.') }}
+                                    @else
+                                        <span class="text-sm font-semibold">
+                                            Hubungi penjual
+                                        </span>
+                                    @endif
+                                </p>
+                            </div>
+
+                            <a
+                                href="{{ route('umkm.show', $product->umkm->slug) }}"
+                                class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#326AAB]/25 px-3 py-2.5 text-xs font-semibold text-[#326AAB] transition hover:border-[#326AAB] hover:bg-[#326AAB] hover:text-white sm:text-sm"
+                            >
+                                Lihat UMKM
+                                <span aria-hidden="true">→</span>
+                            </a>
+
+                        </div>
+
                     </div>
 
                 </article>
-            @empty
-                <div class="rounded-2xl border border-dashed border-gray-300 p-8 sm:col-span-2 md:col-span-4">
-                    <p class="font-semibold text-gray-800">
-                        Belum ada produk yang dipublikasikan.
-                    </p>
 
-                    <p class="mt-2 text-sm text-gray-500">
-                        Produk akan muncul di sini setelah admin menerbitkannya.
-                    </p>
+            @empty
+
+                <div class="rounded-2xl border border-dashed border-[#CFE5E2] bg-[#F5F2EB]/50 p-8 sm:col-span-2 lg:col-span-4">
+                    <div class="mx-auto max-w-md py-5 text-center">
+
+                        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#CFE5E2]/60 text-[#326AAB]">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <path d="m3 7 9-4 9 4-9 5-9-5Z"/>
+                                <path d="M3 7v10l9 5 9-5V7"/>
+                                <path d="M12 12v10"/>
+                            </svg>
+                        </div>
+
+                        <h3 class="mt-5 text-lg font-bold text-[#174875]">
+                            Produk segera hadir
+                        </h3>
+
+                        <p class="mt-2 text-sm leading-6 text-gray-500">
+                            Produk akan ditampilkan setelah data dan foto siap dipublikasikan oleh admin.
+                        </p>
+
+                        <a
+                            href="{{ route('umkm.index') }}"
+                            class="mt-5 inline-flex items-center gap-2 font-semibold text-[#326AAB] hover:underline"
+                        >
+                            Lihat katalog UMKM
+                            <span aria-hidden="true">→</span>
+                        </a>
+
+                    </div>
                 </div>
+
             @endforelse
 
         </div>
 
     </div>
 </section>
+
 
 {{-- Tentang --}}
 <section id="tentang" class="mx-auto max-w-4xl px-5 py-16 text-center">
