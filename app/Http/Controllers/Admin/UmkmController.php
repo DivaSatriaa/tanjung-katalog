@@ -8,7 +8,6 @@ use App\Models\Umkm;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class UmkmController extends Controller
@@ -16,7 +15,6 @@ class UmkmController extends Controller
     /**
      * Display a listing of UMKM.
      */
-
     public function index(Request $request): View
     {
         $validated = $request->validate([
@@ -56,7 +54,6 @@ class UmkmController extends Controller
             'status'
         ));
     }
-
 
     /**
      * Show the form for creating a new UMKM.
@@ -103,7 +100,7 @@ class UmkmController extends Controller
         Umkm::create([
             'category_id' => $validated['category_id'],
             'name' => $validated['name'],
-            'slug' => Str::slug($validated['name']),
+            'slug' => Umkm::uniqueSlugFor($validated['name'], null, 'umkm'),
             'owner_name' => $validated['owner_name'] ?? null,
             'description' => $validated['description'] ?? null,
             'address' => $validated['address'] ?? null,
@@ -168,10 +165,14 @@ class UmkmController extends Controller
             $imagePath = $request->file('cover_image')->store('umkm', 'public');
         }
 
+        $slug = $validated['name'] === $umkm->name
+            ? $umkm->slug
+            : Umkm::uniqueSlugFor($validated['name'], $umkm, 'umkm');
+
         $umkm->update([
             'category_id' => $validated['category_id'],
             'name' => $validated['name'],
-            'slug' => Str::slug($validated['name']),
+            'slug' => $slug,
             'owner_name' => $validated['owner_name'] ?? null,
             'description' => $validated['description'] ?? null,
             'address' => $validated['address'] ?? null,
@@ -198,6 +199,13 @@ class UmkmController extends Controller
         if ($umkm->cover_image) {
             Storage::disk('public')->delete($umkm->cover_image);
         }
+
+        $productImages = $umkm->products()
+            ->whereNotNull('image')
+            ->pluck('image')
+            ->all();
+
+        Storage::disk('public')->delete($productImages);
 
         $umkm->delete();
 
