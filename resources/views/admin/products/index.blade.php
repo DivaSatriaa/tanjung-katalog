@@ -130,19 +130,19 @@
         <table class="min-w-full">
             <thead class="border-b border-gray-100 bg-gray-50">
                 <tr>
-                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
+                    <th class="px-4 py-4 md:px-6 text-left text-xs font-semibold uppercase text-gray-500">
                         Produk
                     </th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
+                    <th class="hidden px-4 py-4 md:px-6 text-left text-xs font-semibold uppercase text-gray-500 md:table-cell">
                         UMKM
                     </th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
+                    <th class="hidden px-4 py-4 md:px-6 text-left text-xs font-semibold uppercase text-gray-500 md:table-cell">
                         Harga
                     </th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold uppercase text-gray-500">
+                    <th class="hidden px-4 py-4 md:px-6 text-left text-xs font-semibold uppercase text-gray-500 md:table-cell">
                         Status
                     </th>
-                    <th class="px-6 py-4 text-right text-xs font-semibold uppercase text-gray-500">
+                    <th class="px-4 py-4 md:px-6 text-right text-xs font-semibold uppercase text-gray-500">
                         Aksi
                     </th>
                 </tr>
@@ -151,9 +151,9 @@
             <tbody class="divide-y divide-gray-100">
                 @forelse ($products as $product)
                     <tr class="transition hover:bg-gray-50">
-                        <td class="px-6 py-4">
+                        <td class="px-4 py-4 md:px-6">
                             <div class="flex items-center gap-4">
-                                <div class="h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-[#CFE5E2]">
+                                <div class="h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-[#CFE5E2] md:h-14 md:w-14">
                                     @if ($product->image)
                                         <img
                                             src="{{ asset('storage/' . $product->image) }}"
@@ -171,18 +171,35 @@
                                     <p class="font-medium text-gray-900">
                                         {{ $product->name }}
                                     </p>
-                                    <p class="mt-1 text-sm text-gray-400">
+                                    <p class="mt-1 hidden text-sm text-gray-400 md:block">
                                         {{ $product->slug }}
                                     </p>
+                                    <p class="mt-1 text-xs text-gray-500 md:hidden">
+                                        {{ $product->umkm?->name ?? 'UMKM tidak tersedia' }}
+                                        ·
+                                        @if ($product->price !== null)
+                                            Rp{{ number_format((float) $product->price, 0, ',', '.') }}
+                                        @else
+                                            Harga belum ditentukan
+                                        @endif
+                                    </p>
+
+                                    <div class="mt-2 md:hidden">
+                                        @if ($product->status === 'published')
+                                            <span class="inline-flex rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700">Published</span>
+                                        @else
+                                            <span class="inline-flex rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700">Draft</span>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </td>
 
-                        <td class="px-6 py-4 text-sm text-gray-600">
+                        <td class="hidden px-4 py-4 md:px-6 text-sm text-gray-600 md:table-cell">
                             {{ $product->umkm?->name ?? 'UMKM tidak tersedia' }}
                         </td>
 
-                        <td class="px-6 py-4 text-sm font-medium text-gray-700">
+                        <td class="hidden px-4 py-4 md:px-6 text-sm font-medium text-gray-700 md:table-cell">
                             @if ($product->price !== null)
                                 Rp{{ number_format((float) $product->price, 0, ',', '.') }}
                             @else
@@ -190,7 +207,7 @@
                             @endif
                         </td>
 
-                        <td class="px-6 py-4">
+                        <td class="hidden px-4 py-4 md:px-6 md:table-cell">
                             @if ($product->status === 'published')
                                 <span class="inline-flex rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-green-700">
                                     Published
@@ -202,7 +219,7 @@
                             @endif
                         </td>
 
-                        <td class="px-6 py-4">
+                        <td class="px-4 py-4 md:px-6">
                             <div class="flex items-center justify-end gap-2">
                                 <a
                                     href="{{ route('admin.products.edit', $product) }}"
@@ -277,7 +294,7 @@
     </div>
 
     @if ($products->hasPages())
-        <div class="border-t border-gray-100 px-6 py-4">
+        <div class="border-t border-gray-100 px-4 py-4 md:px-6">
             {{ $products->links() }}
         </div>
     @endif
