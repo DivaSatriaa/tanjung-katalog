@@ -2,13 +2,13 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\UmkmController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\UmkmController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MapController;
-use App\Http\Controllers\Admin\DashboardController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +23,9 @@ Route::get('/umkm', [CatalogController::class, 'index'])
 
 Route::get('/umkm/{umkm:slug}', [CatalogController::class, 'show'])
     ->name('umkm.show');
+
+Route::get('/produk', [CatalogController::class, 'products'])
+    ->name('product.index');
 
 Route::get('/produk/{product:slug}', [CatalogController::class, 'showProduct'])
     ->name('product.show');
@@ -66,7 +69,7 @@ Route::middleware(['auth', 'admin'])
 
         Route::resource('umkms', UmkmController::class)
             ->except(['show']);
-            
+
         Route::resource('products', ProductController::class)
             ->except(['show']);
 
