@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class CategoryController extends Controller
@@ -43,7 +42,7 @@ class CategoryController extends Controller
 
         Category::create([
             'name' => $validated['name'],
-            'slug' => Str::slug($validated['name']),
+            'slug' => Category::uniqueSlugFor($validated['name'], null, 'kategori'),
         ]);
 
         return redirect()
@@ -71,13 +70,15 @@ class CategoryController extends Controller
                 'required',
                 'string',
                 'max:100',
-                'unique:categories,name,' . $category->id,
+                'unique:categories,name,'.$category->id,
             ],
         ]);
 
         $category->update([
             'name' => $validated['name'],
-            'slug' => Str::slug($validated['name']),
+            'slug' => $validated['name'] === $category->name
+                ? $category->slug
+                : Category::uniqueSlugFor($validated['name'], $category, 'kategori'),
         ]);
 
         return redirect()

@@ -8,7 +8,6 @@ use App\Models\Umkm;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ProductController extends Controller
@@ -92,7 +91,7 @@ class ProductController extends Controller
         Product::create([
             'umkm_id' => $validated['umkm_id'],
             'name' => $validated['name'],
-            'slug' => $this->makeUniqueSlug($validated['name']),
+            'slug' => Product::uniqueSlugFor($validated['name'], null, 'produk'),
             'description' => $validated['description'] ?? null,
             'price' => $validated['price'] ?? null,
             'image' => $imagePath,
@@ -156,10 +155,7 @@ class ProductController extends Controller
         $slug = $product->slug;
 
         if ($validated['name'] !== $product->name) {
-            $slug = $this->makeUniqueSlug(
-                $validated['name'],
-                $product
-            );
+            $slug = Product::uniqueSlugFor($validated['name'], $product, 'produk');
         }
 
         $product->update([
@@ -192,36 +188,5 @@ class ProductController extends Controller
         return redirect()
             ->route('admin.products.index')
             ->with('success', 'Produk berhasil dihapus.');
-    }
-
-    /**
-     * Generate a unique slug.
-     */
-    private function makeUniqueSlug(
-        string $name,
-        ?Product $except = null
-    ): string {
-        $base = Str::slug($name) ?: 'produk';
-        $slug = $base;
-        $suffix = 2;
-
-        while (
-            Product::query()
-                ->where('slug', $slug)
-                ->when(
-                    $except,
-                    fn ($query) => $query->where(
-                        'id',
-                        '!=',
-                        $except->id
-                    )
-                )
-                ->exists()
-        ) {
-            $slug = $base . '-' . $suffix;
-            $suffix++;
-        }
-
-        return $slug;
     }
 }
