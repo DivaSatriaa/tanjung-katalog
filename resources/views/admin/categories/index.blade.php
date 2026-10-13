@@ -46,15 +46,15 @@
             <thead class="bg-gray-50 border-b border-gray-100">
                 <tr>
 
-                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase">
+                    <th class="text-left px-4 py-4 md:px-6 text-xs font-semibold text-gray-500 uppercase">
                         Nama
                     </th>
 
-                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase">
+                    <th class="hidden text-left px-4 py-4 md:px-6 text-xs font-semibold text-gray-500 uppercase md:table-cell">
                         Jumlah UMKM
                     </th>
 
-                    <th class="text-right px-6 py-4 text-xs font-semibold text-gray-500 uppercase">
+                    <th class="text-right px-4 py-4 md:px-6 text-xs font-semibold text-gray-500 uppercase">
                         Aksi
                     </th>
 
@@ -67,7 +67,7 @@
 
                     <tr class="hover:bg-gray-50">
 
-                        <td class="px-6 py-4">
+                        <td class="px-4 py-4 md:px-6">
                             <div class="font-medium">
                                 {{ $category->name }}
                             </div>
@@ -75,13 +75,17 @@
                             <div class="text-sm text-gray-400 mt-1">
                                 {{ $category->slug }}
                             </div>
+
+                            <div class="mt-1 text-xs text-gray-500 md:hidden">
+                                {{ $category->umkms_count }} UMKM
+                            </div>
                         </td>
 
-                        <td class="px-6 py-4 text-sm text-gray-600">
+                        <td class="hidden px-4 py-4 md:px-6 text-sm text-gray-600 md:table-cell">
                             {{ $category->umkms_count }} UMKM
                         </td>
 
-                        <td class="px-6 py-4">
+                        <td class="px-4 py-4 md:px-6">
 
                             <div class="flex items-center justify-end gap-2">
 

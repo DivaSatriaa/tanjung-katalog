@@ -132,23 +132,23 @@
             <thead class="bg-gray-50 border-b border-gray-100">
                 <tr>
 
-                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase">
+                    <th class="text-left px-4 py-4 md:px-6 text-xs font-semibold text-gray-500 uppercase">
                         UMKM
                     </th>
 
-                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase">
+                    <th class="hidden text-left px-4 py-4 md:px-6 text-xs font-semibold text-gray-500 uppercase md:table-cell">
                         Kategori
                     </th>
 
-                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase">
+                    <th class="hidden text-left px-4 py-4 md:px-6 text-xs font-semibold text-gray-500 uppercase md:table-cell">
                         Produk
                     </th>
 
-                    <th class="text-left px-6 py-4 text-xs font-semibold text-gray-500 uppercase">
+                    <th class="hidden text-left px-4 py-4 md:px-6 text-xs font-semibold text-gray-500 uppercase md:table-cell">
                         Status
                     </th>
 
-                    <th class="text-right px-6 py-4 text-xs font-semibold text-gray-500 uppercase">
+                    <th class="text-right px-4 py-4 md:px-6 text-xs font-semibold text-gray-500 uppercase">
                         Aksi
                     </th>
 
@@ -162,11 +162,11 @@
                     <tr class="hover:bg-gray-50">
 
                         {{-- UMKM --}}
-                        <td class="px-6 py-4">
+                        <td class="px-4 py-4 md:px-6">
 
                             <div class="flex items-center gap-4">
 
-                                <div class="w-14 h-14 rounded-xl bg-[#CFE5E2] overflow-hidden flex-shrink-0">
+                                <div class="h-12 w-12 rounded-xl bg-[#CFE5E2] overflow-hidden shrink-0 md:h-14 md:w-14">
 
                                     @if ($umkm->cover_image)
                                         <img
@@ -192,6 +192,18 @@
                                             {{ $umkm->owner_name }}
                                         </div>
                                     @endif
+
+                                    <div class="mt-1 text-xs text-gray-500 md:hidden">
+                                        {{ $umkm->category->name }} · {{ $umkm->products_count }} produk
+                                    </div>
+
+                                    <div class="mt-2 md:hidden">
+                                        @if ($umkm->status === 'published')
+                                            <span class="inline-flex rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700">Published</span>
+                                        @else
+                                            <span class="inline-flex rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700">Draft</span>
+                                        @endif
+                                    </div>
                                 </div>
 
                             </div>
@@ -199,17 +211,17 @@
                         </td>
 
                         {{-- Kategori --}}
-                        <td class="px-6 py-4 text-sm text-gray-600">
+                        <td class="hidden px-4 py-4 md:px-6 text-sm text-gray-600 md:table-cell">
                             {{ $umkm->category->name }}
                         </td>
 
                         {{-- Produk --}}
-                        <td class="px-6 py-4 text-sm text-gray-600">
+                        <td class="hidden px-4 py-4 md:px-6 text-sm text-gray-600 md:table-cell">
                             {{ $umkm->products_count }} produk
                         </td>
 
                         {{-- Status --}}
-                        <td class="px-6 py-4">
+                        <td class="hidden px-4 py-4 md:px-6 md:table-cell">
 
                             @if ($umkm->status === 'published')
 
@@ -228,7 +240,7 @@
                         </td>
 
                         {{-- Aksi --}}
-                        <td class="px-6 py-4">
+                        <td class="px-4 py-4 md:px-6">
 
                             <div class="flex items-center justify-end gap-2">
 
