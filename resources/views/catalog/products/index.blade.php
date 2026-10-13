@@ -57,7 +57,15 @@
                         ])
                         @if ($categorySlug === '') aria-current="page" @endif
                     >
-                        <span>Semua</span>
+                        <span class="flex min-w-0 items-center gap-2.5">
+                            <svg class="h-4 w-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                                <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                                <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+                                <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+                            </svg>
+                            <span>Semua</span>
+                        </span>
                         <span class="text-xs text-gray-400">{{ $totalProducts }}</span>
                     </a>
                 </li>
@@ -77,7 +85,10 @@
                             ])
                             @if ($categorySlug === $category->slug) aria-current="page" @endif
                         >
-                            <span>{{ $category->name }}</span>
+                            <span class="flex min-w-0 items-center gap-2.5">
+                                <x-category-icon :category="$category" class="h-4 w-4 shrink-0" />
+                                <span class="leading-5">{{ $category->name }}</span>
+                            </span>
                             <span class="text-xs text-gray-400">{{ $category->products_count }}</span>
                         </a>
                     </li>
