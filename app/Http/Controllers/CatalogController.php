@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Umkm;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -63,4 +64,19 @@ class CatalogController extends Controller
 
         return view('catalog.umkm.show', compact('umkm'));
     }
+
+
+    public function showProduct(Product $product): View
+    {
+        $product->load('umkm.category');
+
+        abort_unless(
+            $product->status === 'published'
+                && $product->umkm?->status === 'published',
+            404
+        );
+
+        return view('catalog.products.show', compact('product'));
+    }
+
 }

@@ -24,6 +24,9 @@ Route::get('/umkm', [CatalogController::class, 'index'])
 Route::get('/umkm/{umkm:slug}', [CatalogController::class, 'show'])
     ->name('umkm.show');
 
+Route::get('/produk/{product:slug}', [CatalogController::class, 'showProduct'])
+    ->name('product.show');
+
 Route::get('/peta', [MapController::class, 'index'])->name('peta.index');
 
 /*

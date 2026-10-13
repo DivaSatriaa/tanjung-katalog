@@ -67,15 +67,7 @@
                 class="w-full rounded-full border-0 bg-[#F5F2EB] px-4 py-2.5 text-sm outline-none ring-1 ring-transparent transition focus:ring-[#326AAB]"
             >
         </form>
-
-        {{-- Tombol Admin --}}
-        <a
-            href="{{ route('admin.login') }}"
-            class="shrink-0 rounded-full bg-[#326AAB] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#28598f]"
-        >
-            Masuk
-        </a>
-
+        
     </div>
 </header>
 

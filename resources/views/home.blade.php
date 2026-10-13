@@ -563,9 +563,9 @@
 
                     {{-- Product Image --}}
                     <a
-                        href="{{ route('umkm.show', $product->umkm->slug) }}"
+                        href="{{ route('product.show', $product->slug) }}"
                         class="relative block overflow-hidden"
-                        aria-label="Lihat UMKM {{ $product->umkm->name }}"
+                        aria-label="Lihat Produk {{ $product->name }}"
                     >
                         <div class="aspect-square overflow-hidden bg-gradient-to-br from-[#EAF4F7] to-[#CFE5E2]">
 
@@ -618,7 +618,7 @@
                         </p>
 
                         <h3 class="mt-2 line-clamp-2 text-sm font-bold leading-5 text-[#174875] transition group-hover:text-[#326AAB] sm:text-base sm:leading-6">
-                            <a href="{{ route('umkm.show', $product->umkm->slug) }}">
+                            <a href="{{ route('product.show', $product->slug) }}">
                                 {{ $product->name }}
                             </a>
                         </h3>
@@ -648,10 +648,10 @@
                             </div>
 
                             <a
-                                href="{{ route('umkm.show', $product->umkm->slug) }}"
+                                href="{{ route('product.show', $product->slug) }}"
                                 class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#326AAB]/25 px-3 py-2.5 text-xs font-semibold text-[#326AAB] transition hover:border-[#326AAB] hover:bg-[#326AAB] hover:text-white sm:text-sm"
                             >
-                                Lihat UMKM
+                                Lihat Produk
                                 <span aria-hidden="true">→</span>
                             </a>
 
