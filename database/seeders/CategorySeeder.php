@@ -2,16 +2,31 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Category;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class CategorySeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Seed kategori UMKM.
      */
     public function run(): void
     {
-        //
+        $names = [
+            'Makanan & Minuman',
+            'Kerajinan',
+            'Fashion',
+            'Perikanan',
+            'Pertanian',
+            'Lainnya',
+        ];
+
+        foreach ($names as $name) {
+            Category::query()->updateOrCreate(
+                ['slug' => Str::slug($name)],
+                ['name' => $name],
+            );
+        }
     }
 }
