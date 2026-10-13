@@ -13,7 +13,7 @@
 
             <div class="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-[#6EA8C7]/20 blur-3xl"></div>
 
-           <div class="relative grid items-center gap-8 px-6 py-8 sm:px-10 sm:py-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8 lg:px-12 lg:py-10 xl:px-14 xl:py-12">
+           <div class="relative grid grid-cols-[minmax(0,1fr)] items-center gap-8 px-6 py-8 sm:px-10 sm:py-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8 lg:px-12 lg:py-10 xl:px-14 xl:py-12">
 
             {{-- Headline --}}
             <div class="relative z-10">
