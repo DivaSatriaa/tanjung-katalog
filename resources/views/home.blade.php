@@ -262,20 +262,6 @@
         </a>
     </div>
 
-    @php
-        $categoryIcons = [
-            'makanan & minuman' => '🍲',
-            'makanan' => '🍲',
-            'minuman' => '🥤',
-            'kerajinan' => '🧺',
-            'fashion' => '👕',
-            'perikanan' => '🐟',
-            'pertanian' => '🌿',
-            'jasa' => '🛠️',
-            'lainnya' => '•••',
-        ];
-    @endphp
-
     <div class="mt-7 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
 
         @forelse ($categories as $category)
@@ -284,8 +270,8 @@
                 class="group rounded-2xl border border-gray-100 bg-white p-5 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#CFE5E2] hover:shadow-lg"
             >
 
-                <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#CFE5E2]/60 text-3xl transition group-hover:bg-[#326AAB]/10">
-                    {{ $categoryIcons[strtolower($category->name)] ?? '🏪' }}
+                <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#CFE5E2]/60 text-[#326AAB] transition group-hover:bg-[#326AAB]/10">
+                    <x-category-icon :category="$category" />
                 </div>
 
                 <h3 class="mt-4 text-sm font-bold text-[#174875] transition group-hover:text-[#326AAB]">

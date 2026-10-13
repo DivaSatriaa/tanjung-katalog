@@ -77,7 +77,10 @@
                             ])
                             @if ($categorySlug === $category->slug) aria-current="page" @endif
                         >
-                            <span>{{ $category->name }}</span>
+                            <span class="flex min-w-0 items-center gap-2.5">
+                                <x-category-icon :category="$category" class="h-4 w-4 shrink-0" />
+                                <span class="leading-5">{{ $category->name }}</span>
+                            </span>
                             <span class="text-xs text-gray-400">{{ $category->products_count }}</span>
                         </a>
                     </li>
