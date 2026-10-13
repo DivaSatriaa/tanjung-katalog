@@ -31,39 +31,37 @@
 
         {{-- Navigasi Desktop --}}
         <nav class="hidden items-center gap-6 text-sm font-medium lg:flex">
-            <a href="{{ route('home') }}"
-               class="text-[#326AAB]">
-                Beranda
-            </a>
-
-            <a href="{{ route('umkm.index') }}"
-               class="text-gray-600 transition hover:text-[#326AAB]">
-                UMKM
-            </a>
-
-            <a
-                href="{{ route('peta.index') }}"
-                class="text-gray-600 transition hover:text-[#326AAB]"
-            >
-                Peta
-            </a>
-
-            <a href="{{ route('home') }}#tentang"
-               class="text-gray-600 transition hover:text-[#326AAB]">
-                Tentang
-            </a>
+            @foreach ([
+                ['label' => 'Beranda', 'href' => route('home'), 'active' => request()->routeIs('home')],
+                ['label' => 'Produk', 'href' => route('product.index'), 'active' => request()->routeIs('product.*')],
+                ['label' => 'UMKM', 'href' => route('umkm.index'), 'active' => request()->routeIs('umkm.*')],
+                ['label' => 'Peta', 'href' => route('peta.index'), 'active' => request()->routeIs('peta.*')],
+                ['label' => 'Tentang', 'href' => route('home') . '#tentang', 'active' => false],
+            ] as $item)
+                <a
+                    href="{{ $item['href'] }}"
+                    @class([
+                        'transition hover:text-[#326AAB]',
+                        'text-[#326AAB]' => $item['active'],
+                        'text-gray-600' => ! $item['active'],
+                    ])
+                    @if ($item['active']) aria-current="page" @endif
+                >
+                    {{ $item['label'] }}
+                </a>
+            @endforeach
         </nav>
 
         {{-- Search --}}
         <form
             method="GET"
-            action="{{ route('umkm.index') }}"
+            action="{{ route('product.index') }}"
             class="hidden min-w-0 max-w-xs flex-1 xl:flex"
         >
             <input
                 type="search"
                 name="q"
-                placeholder="Cari UMKM..."
+                placeholder="Cari produk atau UMKM..."
                 class="w-full rounded-full border-0 bg-[#F5F2EB] px-4 py-2.5 text-sm outline-none ring-1 ring-transparent transition focus:ring-[#326AAB]"
             >
         </form>
