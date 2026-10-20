@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\GeneratesUniqueSlug;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -25,5 +26,18 @@ class Category extends Model
     public function products(): HasManyThrough
     {
         return $this->hasManyThrough(Product::class, Umkm::class);
+    }
+
+    /**
+     * Urutkan berdasarkan nama dengan kategori "Lainnya" selalu di akhir.
+     *
+     * @param  Builder<Category>  $query
+     * @return Builder<Category>
+     */
+    public function scopeOrdered(Builder $query): Builder
+    {
+        return $query
+            ->orderByRaw("CASE WHEN slug = 'lainnya' THEN 1 ELSE 0 END")
+            ->orderBy('name');
     }
 }

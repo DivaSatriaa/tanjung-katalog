@@ -1,7 +1,13 @@
 
 @extends('layouts.public')
 
-@section('title', $product->name . ' | TanjungKatalog')
+@section('title', $product->name)
+
+@section('meta_description', \Illuminate\Support\Str::limit($product->description ?: 'Produk ' . $product->name . ' dari ' . $product->umkm->name . ', UMKM Kelurahan Tanjung Mas.', 160))
+
+@if ($product->image)
+    @section('meta_image', asset('storage/' . $product->image))
+@endif
 
 @section('content')
 
@@ -42,12 +48,21 @@
 
             <span>/</span>
 
-            <a href="{{ route('umkm.index') }}"
+            <a href="{{ route('product.index') }}"
                class="transition hover:text-[#326AAB]">
-                Katalog UMKM
+                Produk
             </a>
 
             <span>/</span>
+
+            @if ($umkm->category)
+                <a href="{{ route('product.index', ['category' => $umkm->category->slug]) }}"
+                   class="transition hover:text-[#326AAB]">
+                    {{ $umkm->category->name }}
+                </a>
+
+                <span>/</span>
+            @endif
 
             <span class="font-medium text-[#174875]">
                 {{ $product->name }}
@@ -58,30 +73,66 @@
         <div class="grid items-start gap-8 lg:grid-cols-2 lg:gap-12">
 
             {{-- Foto produk --}}
-            <section class="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm">
-                <div class="relative aspect-square overflow-hidden bg-gradient-to-br from-[#EAF4F7] to-[#CFE5E2]">
+            @php
+                $photos = collect([$product->image])
+                    ->merge($product->images->pluck('path'))
+                    ->filter()
+                    ->values();
+            @endphp
 
-                    @if ($product->image)
-                        <img
-                            src="{{ asset('storage/' . $product->image) }}"
-                            alt="Foto produk {{ $product->name }}"
-                            class="h-full w-full object-cover"
-                        >
-                    @else
-                        <div class="flex h-full flex-col items-center justify-center text-[#326AAB]">
-                            <span class="text-7xl" aria-hidden="true">📦</span>
-                            <p class="mt-4 text-sm font-medium">
-                                Foto produk belum tersedia
-                            </p>
-                        </div>
-                    @endif
+            <section data-gallery>
+                <div class="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm">
+                    <div class="relative aspect-square overflow-hidden bg-gradient-to-br from-[#EAF4F7] to-[#CFE5E2]">
 
-                    @if ($product->is_featured)
-                        <span class="absolute left-5 top-5 rounded-full bg-white/95 px-4 py-2 text-xs font-semibold text-[#326AAB] shadow-sm">
-                            Produk Unggulan
-                        </span>
-                    @endif
+                        @if ($photos->isNotEmpty())
+                            <img
+                                src="{{ asset('storage/' . $photos->first()) }}"
+                                alt="Foto produk {{ $product->name }}"
+                                class="h-full w-full object-cover"
+                                data-gallery-main
+                            >
+                        @else
+                            <div class="flex h-full flex-col items-center justify-center text-[#326AAB]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="m3 7 9-4 9 4-9 5-9-5Z"/>
+                                    <path d="M3 7v10l9 5 9-5V7"/>
+                                    <path d="M12 12v10"/>
+                                </svg>
+                                <p class="mt-4 text-sm font-medium">
+                                    Foto produk belum tersedia
+                                </p>
+                            </div>
+                        @endif
+
+                        @if ($product->is_featured)
+                            <span class="absolute left-5 top-5 rounded-full bg-white/95 px-4 py-2 text-xs font-semibold text-[#326AAB] shadow-sm">
+                                Produk Unggulan
+                            </span>
+                        @endif
+                    </div>
                 </div>
+
+                @if ($photos->count() > 1)
+                    <div class="mt-4 grid grid-cols-4 gap-3 sm:grid-cols-5">
+                        @foreach ($photos as $photo)
+                            <button
+                                type="button"
+                                data-gallery-thumb
+                                data-src="{{ asset('storage/' . $photo) }}"
+                                aria-label="Tampilkan foto {{ $loop->iteration }} dari {{ $photos->count() }}"
+                                @if ($loop->first) aria-current="true" @endif
+                                class="aspect-square overflow-hidden rounded-xl border-2 border-transparent bg-white shadow-sm transition hover:border-[#6EA8C7] aria-[current=true]:border-[#326AAB]"
+                            >
+                                <img
+                                    src="{{ asset('storage/' . $photo) }}"
+                                    alt=""
+                                    loading="lazy"
+                                    class="h-full w-full object-cover"
+                                >
+                            </button>
+                        @endforeach
+                    </div>
+                @endif
             </section>
 
             {{-- Informasi produk --}}
@@ -120,13 +171,7 @@
                         Deskripsi Produk
                     </h2>
 
-                    <div class="mt-3 whitespace-pre-line break-words text-sm leading-7 text-gray-600 sm:text-base">
-                        @if ($product->description)
-                            {{ $product->description }}
-                        @else
-                            Informasi produk belum ditambahkan oleh penjual.
-                        @endif
-                    </div>
+                    <div class="mt-3 whitespace-pre-line break-words text-sm leading-7 text-gray-600 sm:text-base">{{ $product->description ?: 'Informasi produk belum ditambahkan oleh penjual.' }}</div>
                 </div>
 
                 {{-- Informasi penjual --}}
@@ -137,7 +182,7 @@
 
                     <div class="mt-3 flex items-start gap-4">
                         <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#EAF4F7] text-xl text-[#326AAB]">
-                            🏪
+                            <x-icon name="store" class="h-6 w-6" />
                         </div>
 
                         <div class="min-w-0 flex-1">
@@ -153,7 +198,7 @@
 
                             @if ($umkm->address)
                                 <p class="mt-3 flex items-start gap-2 text-sm leading-6 text-gray-600">
-                                    <span aria-hidden="true">📍</span>
+                                    <x-icon name="pin" class="mt-0.5 h-4 w-4 shrink-0 text-[#326AAB]" />
                                     <span>{{ $umkm->address }}</span>
                                 </p>
                             @endif
@@ -209,7 +254,7 @@
                 </div>
 
                 <a
-                    href="{{ route('umkm.index') }}"
+                    href="{{ route('product.index') }}"
                     class="mt-5 inline-flex items-center justify-center gap-2 rounded-xl border border-gray-300 px-5 py-3 text-sm font-semibold text-gray-600 transition hover:border-[#326AAB] hover:text-[#326AAB]"
                 >
                     <span aria-hidden="true">←</span>

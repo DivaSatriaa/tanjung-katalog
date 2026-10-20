@@ -3,109 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
 
     <title>Login Admin — TanjungKatalog</title>
+
+    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
+    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="min-h-screen bg-[#F5F2EB] flex items-center justify-center px-4">
+<body class="admin-panel flex min-h-screen items-center justify-center bg-gradient-to-br from-[#F8FCFD] via-[#F5F2EB] to-[#CFE5E2] px-5 py-10 text-gray-900 antialiased">
 
-    <div class="w-full max-w-md">
+    <main class="w-full max-w-md">
 
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-[#326AAB]">
-                TanjungKatalog
-            </h1>
-
-            <p class="mt-2 text-gray-600">
-                Admin Panel
-            </p>
+        <div class="text-center">
+            <a href="{{ route('home') }}" class="inline-block">
+                <img
+                    src="{{ asset('images/tanjungkatalog-logo.png') }}"
+                    alt="TanjungKatalog — Katalog UMKM Kelurahan Tanjung Mas"
+                    class="mx-auto h-auto w-64"
+                >
+            </a>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div class="mt-8 rounded-3xl border border-[#CFE5E2] bg-white p-6 shadow-[0_12px_40px_rgba(50,106,171,0.12)] sm:p-8">
 
-            <h2 class="text-xl font-semibold text-gray-900">
+            <h1 class="text-xl font-bold text-[#174875]">
                 Masuk sebagai Admin
-            </h2>
+            </h1>
 
-            <p class="text-sm text-gray-500 mt-1 mb-6">
-                Kelola data UMKM dan produk TanjungKatalog.
+            <p class="mt-1 text-sm text-gray-500">
+                Kelola data UMKM, produk, dan berita TanjungKatalog.
             </p>
 
-            <form method="POST" action="{{ route('admin.login.store') }}">
+            <form method="POST" action="{{ route('admin.login.store') }}" class="mt-6 space-y-5">
                 @csrf
 
-                <div class="mb-4">
-                    <label
-                        for="email"
-                        class="block text-sm font-medium text-gray-700 mb-2"
-                    >
+                <div>
+                    <label for="email" class="mb-2 block text-sm font-medium text-gray-700">
                         Email
                     </label>
 
                     <input
-                        type="email"
                         id="email"
+                        type="email"
                         name="email"
                         value="{{ old('email') }}"
                         required
                         autofocus
-                        class="w-full rounded-xl border-gray-300 focus:border-[#326AAB] focus:ring-[#326AAB] px-4 py-3"
-                        placeholder="admin@example.com"
+                        autocomplete="username"
+                        placeholder="admin@contoh.id"
+                        class="px-4 py-3"
                     >
 
                     @error('email')
-                        <p class="mt-2 text-sm text-red-600">
-                            {{ $message }}
-                        </p>
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div class="mb-6">
-                    <label
-                        for="password"
-                        class="block text-sm font-medium text-gray-700 mb-2"
-                    >
+                <div>
+                    <label for="password" class="mb-2 block text-sm font-medium text-gray-700">
                         Password
                     </label>
 
                     <input
-                        type="password"
                         id="password"
+                        type="password"
                         name="password"
                         required
-                        class="w-full rounded-xl border-gray-300 focus:border-[#326AAB] focus:ring-[#326AAB] px-4 py-3"
+                        autocomplete="current-password"
                         placeholder="Masukkan password"
+                        class="px-4 py-3"
                     >
 
                     @error('password')
-                        <p class="mt-2 text-sm text-red-600">
-                            {{ $message }}
-                        </p>
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <button
                     type="submit"
-                    class="w-full rounded-xl bg-[#326AAB] hover:bg-[#28598f] text-white font-medium py-3 transition"
+                    class="w-full rounded-xl bg-[#326AAB] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#28598f] focus:outline-none focus:ring-2 focus:ring-[#326AAB] focus:ring-offset-2"
                 >
                     Masuk
                 </button>
             </form>
-
         </div>
 
-        <div class="text-center mt-6">
-            <a
-                href="/"
-                class="text-sm text-gray-500 hover:text-[#326AAB]"
-            >
-                ← Kembali ke TanjungKatalog
+        <p class="mt-6 text-center">
+            <a href="{{ route('home') }}" class="text-sm text-gray-500 transition hover:text-[#326AAB]">
+                &larr; Kembali ke TanjungKatalog
             </a>
-        </div>
+        </p>
 
-    </div>
+    </main>
 
 </body>
 </html>

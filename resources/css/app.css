@@ -4,3 +4,67 @@
 @source "../../storage/framework/views/*.php";
 @source "../**/*.blade.php";
 @source "../**/*.js";
+
+@theme {
+    --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/*
+ * Tailwind v4 menghapus border bawaan elemen form. Panel admin memakai
+ * kelas warna border tanpa ketebalan, jadi gaya dasarnya ditetapkan di sini.
+ */
+@layer base {
+    .admin-panel :where(input:not([type="checkbox"], [type="radio"], [type="file"], [type="hidden"], [type="color"]), select, textarea) {
+        width: 100%;
+        border: 1px solid var(--color-gray-300);
+        border-radius: 0.75rem;
+        background-color: #fff;
+        color: var(--color-gray-900);
+        font-size: 0.875rem;
+        line-height: 1.5;
+        transition: border-color 150ms, box-shadow 150ms;
+    }
+
+    .admin-panel :where(input:not([type="checkbox"], [type="radio"], [type="file"], [type="hidden"], [type="color"]), select, textarea):focus {
+        border-color: #326AAB;
+        outline: none;
+        box-shadow: 0 0 0 3px rgb(50 106 171 / 0.15);
+    }
+
+    .admin-panel :where(input[type="file"]) {
+        width: 100%;
+        border: 1px dashed var(--color-gray-300);
+        border-radius: 0.75rem;
+        background-color: #fff;
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+        color: var(--color-gray-600);
+        cursor: pointer;
+    }
+
+    .admin-panel :where(input[type="file"])::file-selector-button {
+        margin-right: 0.75rem;
+        border: 0;
+        border-radius: 0.5rem;
+        background-color: #EAF4F7;
+        padding: 0.5rem 0.875rem;
+        font-weight: 600;
+        color: #326AAB;
+        cursor: pointer;
+    }
+
+    .admin-panel :where(input[type="checkbox"]) {
+        width: 1.125rem;
+        height: 1.125rem;
+        accent-color: #326AAB;
+    }
+
+    .admin-panel :where(select) {
+        appearance: none;
+        padding-right: 2.5rem;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+        background-position: right 0.85rem center;
+        background-repeat: no-repeat;
+        background-size: 1.1rem;
+    }
+}

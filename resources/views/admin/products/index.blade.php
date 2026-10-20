@@ -21,18 +21,6 @@
     </a>
 </div>
 
-@if (session('success'))
-    <div class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
-        {{ session('success') }}
-    </div>
-@endif
-
-@if (session('error'))
-    <div class="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-        {{ session('error') }}
-    </div>
-@endif
-
 
 {{-- Pencarian dan filter produk --}}
 <form
@@ -96,11 +84,11 @@
                 <option value="">Semua status</option>
 
                 <option value="published" @selected($status === 'published')>
-                    Published
+                    Terbit
                 </option>
 
                 <option value="draft" @selected($status === 'draft')>
-                    Draft
+                    Draf
                 </option>
             </select>
         </div>
@@ -162,7 +150,7 @@
                                         >
                                     @else
                                         <div class="flex h-full w-full items-center justify-center text-xl text-[#326AAB]">
-                                            📦
+                                            <x-icon name="box" class="mx-auto h-6 w-6" />
                                         </div>
                                     @endif
                                 </div>
@@ -186,9 +174,9 @@
 
                                     <div class="mt-2 md:hidden">
                                         @if ($product->status === 'published')
-                                            <span class="inline-flex rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700">Published</span>
+                                            <span class="inline-flex rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700">Terbit</span>
                                         @else
-                                            <span class="inline-flex rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700">Draft</span>
+                                            <span class="inline-flex rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700">Draf</span>
                                         @endif
                                     </div>
                                 </div>
@@ -210,11 +198,11 @@
                         <td class="hidden px-4 py-4 md:px-6 md:table-cell">
                             @if ($product->status === 'published')
                                 <span class="inline-flex rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-green-700">
-                                    Published
+                                    Terbit
                                 </span>
                             @else
                                 <span class="inline-flex rounded-full bg-yellow-50 px-3 py-1 text-xs font-medium text-yellow-700">
-                                    Draft
+                                    Draf
                                 </span>
                             @endif
                         </td>
@@ -251,7 +239,7 @@
                     <tr>
                         <td colspan="5" class="px-6 py-16 text-center">
                             @if ($search !== '' || $umkmId !== '' || $status !== '')
-                                <div class="mb-3 text-4xl">🔎</div>
+                                <div class="mb-3 text-4xl"><x-icon name="search" class="mx-auto h-10 w-10 text-gray-300" /></div>
 
                                 <p class="font-medium text-gray-900">
                                     Tidak ada produk yang cocok
@@ -268,7 +256,7 @@
                                     Reset Pencarian
                                 </a>
                             @else
-                                <div class="mb-3 text-4xl">📦</div>
+                                <div class="mb-3 text-4xl"><x-icon name="box" class="mx-auto h-10 w-10 text-gray-300" /></div>
 
                                 <p class="font-medium text-gray-900">
                                     Belum ada produk

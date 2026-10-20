@@ -4,12 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>@yield('title', 'Katalog UMKM') | TanjungKatalog</title>
+    @php
+        $pageTitle = trim($__env->yieldContent('title', 'Katalog UMKM'));
+        $metaDescription = trim($__env->yieldContent('meta_description', 'Jelajahi UMKM dan produk lokal Kelurahan Tanjung Mas, Semarang.'));
+        $metaImage = trim($__env->yieldContent('meta_image', asset('images/og-image.jpg')));
+    @endphp
 
-    <meta
-        name="description"
-        content="@yield('meta_description', 'Jelajahi UMKM dan produk lokal Kelurahan Tanjung Mas, Semarang.')"
-    >
+    {{-- Nilai section sudah di-escape oleh Blade, jadi dicetak tanpa escape ulang. --}}
+    <title>{!! $pageTitle !!} | TanjungKatalog</title>
+
+    <meta name="description" content="{!! $metaDescription !!}">
+    <link rel="canonical" href="{{ url()->current() }}">
+    <meta name="theme-color" content="#326AAB">
+
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:site_name" content="TanjungKatalog">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:title" content="{!! $pageTitle !!} | TanjungKatalog">
+    <meta property="og:description" content="{!! $metaDescription !!}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="{!! $metaImage !!}">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('images/icon-192.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
@@ -42,6 +65,12 @@
             'href' => route('peta.index'),
             'active' => request()->routeIs('peta.*'),
             'icon' => '<path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/>',
+        ],
+        [
+            'label' => 'Berita',
+            'href' => route('posts.index'),
+            'active' => request()->routeIs('posts.*'),
+            'icon' => '<path d="M4 5a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v14a1 1 0 0 0 1 1H6a2 2 0 0 1-2-2V5Z"/><path d="M17 8h2a1 1 0 0 1 1 1v9a2 2 0 0 1-2 2"/><path d="M8 8h5M8 12h5M8 16h3"/>',
         ],
     ];
 @endphp
@@ -161,20 +190,73 @@
     </main>
 
     <footer class="mt-20 border-t border-gray-200 bg-white">
-        <div class="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+        <div class="mx-auto grid max-w-7xl gap-10 px-5 py-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
 
             <div>
-                <p class="font-bold text-[#326AAB]">TanjungKatalog</p>
+                <a href="{{ route('home') }}" class="inline-block">
+                    <img
+                        src="{{ asset('images/tanjungkatalog-logo.png') }}"
+                        alt="TanjungKatalog"
+                        class="h-auto w-52"
+                        loading="lazy"
+                    >
+                </a>
 
-                <p class="mt-1 text-sm text-gray-500">
-                    Katalog digital UMKM Kelurahan Tanjung Mas.
+                <p class="mt-4 max-w-sm text-sm leading-6 text-gray-500">
+                    Katalog digital untuk mengenalkan usaha dan produk lokal warga
+                    Kelurahan Tanjung Mas, Semarang. Dukung UMKM, majukan Tanjung Mas.
                 </p>
             </div>
 
-            <p class="text-sm text-gray-400">
-                © {{ date('Y') }} TanjungKatalog
-            </p>
+            <div>
+                <h2 class="text-sm font-bold uppercase tracking-wider text-[#174875]">
+                    Jelajahi
+                </h2>
 
+                <ul class="mt-4 space-y-2.5 text-sm">
+                    @foreach ($navItems as $item)
+                        <li>
+                            <a href="{{ $item['href'] }}" class="text-gray-600 transition hover:text-[#326AAB]">
+                                {{ $item['label'] }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+
+            <div>
+                <h2 class="text-sm font-bold uppercase tracking-wider text-[#174875]">
+                    Lokasi
+                </h2>
+
+                <p class="mt-4 flex items-start gap-2 text-sm leading-6 text-gray-600">
+                    <svg class="mt-0.5 h-5 w-5 shrink-0 text-[#326AAB]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11Z"/>
+                        <circle cx="12" cy="10" r="2.5"/>
+                    </svg>
+                    <span>
+                        Kelurahan Tanjung Mas,<br>
+                        Kecamatan Semarang Utara,<br>
+                        Kota Semarang, Jawa Tengah
+                    </span>
+                </p>
+
+                <a
+                    href="{{ route('peta.index') }}"
+                    class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#326AAB] hover:underline"
+                >
+                    Lihat peta UMKM
+                    <span aria-hidden="true">&rarr;</span>
+                </a>
+            </div>
+
+        </div>
+
+        <div class="border-t border-gray-100">
+            <div class="mx-auto flex max-w-7xl flex-col gap-2 px-5 py-5 text-xs text-gray-400 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+                <p>&copy; {{ date('Y') }} TanjungKatalog. Katalog UMKM Kelurahan Tanjung Mas.</p>
+                <p>Data usaha dikelola oleh admin kelurahan.</p>
+            </div>
         </div>
     </footer>
 
@@ -183,7 +265,7 @@
         class="fixed inset-x-0 bottom-0 z-40 border-t border-gray-200 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden"
         aria-label="Navigasi bawah"
     >
-        <ul class="mx-auto grid max-w-lg grid-cols-4">
+        <ul class="mx-auto grid max-w-lg grid-cols-5">
             @foreach ($navItems as $item)
                 <li>
                     <a

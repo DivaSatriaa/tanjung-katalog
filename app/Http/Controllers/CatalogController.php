@@ -12,8 +12,8 @@ class CatalogController extends Controller
 {
     public function index(Request $request): View
     {
-        $search = trim((string) $request->input('q', ''));
-        $categorySlug = $request->input('category');
+        $search = trim($this->stringInput($request, 'q'));
+        $categorySlug = $this->stringInput($request, 'category');
 
         $umkms = Umkm::query()
             ->where('status', 'published')
@@ -29,7 +29,7 @@ class CatalogController extends Controller
                         ->orWhere('description', 'like', "%{$search}%");
                 });
             })
-            ->when($categorySlug, function ($query) use ($categorySlug) {
+            ->when($categorySlug !== '', function ($query) use ($categorySlug) {
                 $query->whereHas('category', function ($categoryQuery) use ($categorySlug) {
                     $categoryQuery->where('slug', $categorySlug);
                 });
@@ -39,7 +39,7 @@ class CatalogController extends Controller
             ->withQueryString();
 
         $categories = Category::query()
-            ->orderBy('name')
+            ->ordered()
             ->get();
 
         return view('catalog.umkm.index', compact(
@@ -114,7 +114,7 @@ class CatalogController extends Controller
                     ->where('products.status', 'published')
                     ->where('umkms.status', 'published'),
             ])
-            ->orderBy('name')
+            ->ordered()
             ->get();
 
         $totalProducts = $categories->sum('products_count');
@@ -141,7 +141,7 @@ class CatalogController extends Controller
 
     public function showProduct(Product $product): View
     {
-        $product->load('umkm.category');
+        $product->load(['umkm.category', 'images']);
 
         abort_unless(
             $product->status === 'published'

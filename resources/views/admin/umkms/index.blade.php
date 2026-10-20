@@ -25,12 +25,6 @@
 
 </div>
 
-@if (session('success'))
-    <div class="mb-6 rounded-xl bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-700">
-        {{ session('success') }}
-    </div>
-@endif
-
 
 {{-- Pencarian dan filter UMKM --}}
 <form
@@ -94,11 +88,11 @@
                 <option value="">Semua status</option>
 
                 <option value="published" @selected($status === 'published')>
-                    Published
+                    Terbit
                 </option>
 
                 <option value="draft" @selected($status === 'draft')>
-                    Draft
+                    Draf
                 </option>
             </select>
         </div>
@@ -176,7 +170,7 @@
                                         >
                                     @else
                                         <div class="w-full h-full flex items-center justify-center text-[#326AAB] text-xl">
-                                            🏪
+                                            <x-icon name="store" class="mx-auto h-6 w-6" />
                                         </div>
                                     @endif
 
@@ -199,9 +193,9 @@
 
                                     <div class="mt-2 md:hidden">
                                         @if ($umkm->status === 'published')
-                                            <span class="inline-flex rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700">Published</span>
+                                            <span class="inline-flex rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700">Terbit</span>
                                         @else
-                                            <span class="inline-flex rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700">Draft</span>
+                                            <span class="inline-flex rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700">Draf</span>
                                         @endif
                                     </div>
                                 </div>
@@ -226,13 +220,13 @@
                             @if ($umkm->status === 'published')
 
                                 <span class="inline-flex items-center rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-green-700">
-                                    Published
+                                    Terbit
                                 </span>
 
                             @else
 
                                 <span class="inline-flex items-center rounded-full bg-yellow-50 px-3 py-1 text-xs font-medium text-yellow-700">
-                                    Draft
+                                    Draf
                                 </span>
 
                             @endif
@@ -280,9 +274,9 @@
                         <td colspan="5" class="px-6 py-16 text-center">
                             <div class="mb-3 text-4xl">
                                 @if ($search !== '' || $categoryId !== '' || $status !== '')
-                                    🔎
+                                    <x-icon name="search" class="mx-auto h-10 w-10 text-gray-300" />
                                 @else
-                                    🏪
+                                    <x-icon name="store" class="mx-auto h-10 w-10 text-gray-300" />
                                 @endif
                             </div>
 

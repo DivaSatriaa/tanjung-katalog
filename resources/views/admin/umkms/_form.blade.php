@@ -412,8 +412,10 @@
             name="cover_image"
             type="file"
             accept=".jpg,.jpeg,.png,.webp"
-            class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm"
+            data-image-preview="cover-image-preview"
         >
+
+        <img id="cover-image-preview" alt="" class="mt-4 hidden h-40 w-56 rounded-xl border border-gray-200 object-cover">
 
         <p class="mt-2 text-xs text-gray-400">
             JPG, JPEG, PNG, atau WEBP. Maksimal 4 MB.
@@ -444,14 +446,14 @@
                     value="draft"
                     @selected(old('status', $umkm->status ?? 'draft') === 'draft')
                 >
-                    Draft — belum ditampilkan ke publik
+                    Draf — belum ditampilkan ke publik
                 </option>
 
                 <option
                     value="published"
                     @selected(old('status', $umkm->status ?? 'draft') === 'published')
                 >
-                    Published — ditampilkan ke publik
+                    Terbit — ditampilkan ke publik
                 </option>
             </select>
 
