@@ -32,6 +32,6 @@ class AdminLayoutTest extends TestCase
             ->assertOk()
             ->assertSee('Sari Laut')
             ->assertSee('md:hidden', false)
-            ->assertSee('Draft');
+            ->assertSee('Draf');
     }
 }

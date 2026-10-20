@@ -12,6 +12,8 @@ use Illuminate\View\View;
 
 class ProductController extends Controller
 {
+    private const MAX_GALLERY_IMAGES = 8;
+
     /**
      * Display all products.
      */
@@ -79,6 +81,10 @@ class ProductController extends Controller
             ],
             'is_featured' => ['nullable', 'boolean'],
             'status' => ['required', 'in:draft,published'],
+            'gallery' => ['nullable', 'array', 'max:'.self::MAX_GALLERY_IMAGES],
+            'gallery.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'remove_gallery' => ['nullable', 'array'],
+            'remove_gallery.*' => ['integer'],
         ]);
 
         $imagePath = null;
@@ -88,7 +94,7 @@ class ProductController extends Controller
                 ->store('products', 'public');
         }
 
-        Product::create([
+        $product = Product::create([
             'umkm_id' => $validated['umkm_id'],
             'name' => $validated['name'],
             'slug' => Product::uniqueSlugFor($validated['name'], null, 'produk'),
@@ -98,6 +104,8 @@ class ProductController extends Controller
             'is_featured' => $request->boolean('is_featured'),
             'status' => $validated['status'],
         ]);
+
+        $this->storeGalleryImages($request, $product);
 
         return redirect()
             ->route('admin.products.index')
@@ -109,6 +117,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product): View
     {
+        $product->load('images');
+
         $umkms = Umkm::orderBy('name')->get();
 
         return view(
@@ -137,6 +147,10 @@ class ProductController extends Controller
             ],
             'is_featured' => ['nullable', 'boolean'],
             'status' => ['required', 'in:draft,published'],
+            'gallery' => ['nullable', 'array', 'max:'.self::MAX_GALLERY_IMAGES],
+            'gallery.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'remove_gallery' => ['nullable', 'array'],
+            'remove_gallery.*' => ['integer'],
         ]);
 
         $imagePath = $product->image;
@@ -169,6 +183,14 @@ class ProductController extends Controller
             'status' => $validated['status'],
         ]);
 
+        $this->removeGalleryImages($product, $validated['remove_gallery'] ?? []);
+
+        if (! $this->storeGalleryImages($request, $product)) {
+            return redirect()
+                ->route('admin.products.edit', $product)
+                ->with('error', 'Sebagian foto galeri tidak disimpan karena galeri maksimal berisi '.self::MAX_GALLERY_IMAGES.' foto.');
+        }
+
         return redirect()
             ->route('admin.products.index')
             ->with('success', 'Produk berhasil diperbarui.');
@@ -183,10 +205,57 @@ class ProductController extends Controller
             Storage::disk('public')->delete($product->image);
         }
 
+        Storage::disk('public')->delete($product->images()->pluck('path')->all());
+
         $product->delete();
 
         return redirect()
             ->route('admin.products.index')
             ->with('success', 'Produk berhasil dihapus.');
+    }
+
+    /**
+     * Simpan foto galeri baru tanpa melebihi batas jumlah foto.
+     *
+     * @return bool false bila ada foto yang tidak disimpan karena batas tercapai
+     */
+    private function storeGalleryImages(Request $request, Product $product): bool
+    {
+        $files = $request->file('gallery', []);
+
+        if ($files === []) {
+            return true;
+        }
+
+        $existingCount = $product->images()->count();
+        $nextOrder = (int) $product->images()->max('sort_order') + 1;
+        $availableSlots = max(0, self::MAX_GALLERY_IMAGES - $existingCount);
+
+        foreach (array_slice($files, 0, $availableSlots) as $file) {
+            $product->images()->create([
+                'path' => $file->store('products/gallery', 'public'),
+                'sort_order' => $nextOrder++,
+            ]);
+        }
+
+        return count($files) <= $availableSlots;
+    }
+
+    /**
+     * Hapus foto galeri yang dipilih, hanya milik produk ini.
+     *
+     * @param  array<int, int|string>  $imageIds
+     */
+    private function removeGalleryImages(Product $product, array $imageIds): void
+    {
+        if ($imageIds === []) {
+            return;
+        }
+
+        $images = $product->images()->whereKey($imageIds)->get();
+
+        Storage::disk('public')->delete($images->pluck('path')->all());
+
+        $product->images()->whereKey($images->modelKeys())->delete();
     }
 }

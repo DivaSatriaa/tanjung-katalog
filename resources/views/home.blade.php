@@ -39,7 +39,7 @@
                 {{-- Search --}}
                 <form
                     method="GET"
-                    action="{{ route('umkm.index') }}"
+                    action="{{ route('product.index') }}"
                     class="mt-8 flex max-w-lg items-center gap-2 rounded-2xl border border-gray-200 bg-white p-2 shadow-sm focus-within:border-[#6EA8C7] focus-within:ring-2 focus-within:ring-[#6EA8C7]/20"
                 >
                     <span class="pl-3 text-[#326AAB]" aria-hidden="true">
@@ -62,7 +62,8 @@
                     <input
                         type="search"
                         name="q"
-                        placeholder="Cari UMKM atau nama usaha..."
+                        placeholder="Cari produk atau UMKM..."
+                        aria-label="Cari produk atau UMKM"
                         class="min-w-0 flex-1 border-0 bg-transparent px-2 py-3 text-sm outline-none focus:ring-0"
                     >
 
@@ -78,19 +79,22 @@
                 <div class="mt-5 flex flex-wrap gap-3">
 
                     <a
-                        href="{{ route('umkm.index') }}"
+                        href="{{ route('product.index') }}"
                         class="inline-flex items-center justify-center gap-2 rounded-full bg-[#326AAB] px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-[#326AAB]/20 transition hover:-translate-y-0.5 hover:bg-[#28598f]"
                     >
                         Lihat Katalog
-
-                        <span aria-hidden="true">→</span>
+                        <span aria-hidden="true">&rarr;</span>
                     </a>
 
                     <a
-                        href="#kategori"
-                        class="inline-flex items-center justify-center rounded-full border border-[#326AAB] bg-white/70 px-6 py-3.5 text-sm font-semibold text-[#326AAB] transition hover:bg-[#CFE5E2]/50"
+                        href="{{ route('peta.index') }}"
+                        class="inline-flex items-center justify-center gap-2 rounded-full border border-[#326AAB] bg-white/70 px-6 py-3.5 text-sm font-semibold text-[#326AAB] transition hover:bg-[#CFE5E2]/50"
                     >
-                        Jelajahi Kategori
+                        <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11Z"/>
+                            <circle cx="12" cy="10" r="2.5"/>
+                        </svg>
+                        Lihat Peta UMKM
                     </a>
 
                 </div>
@@ -262,29 +266,29 @@
         </a>
     </div>
 
-    <div class="mt-7 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+    <div class="mt-7 grid grid-cols-4 gap-x-2 gap-y-4 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-6">
 
         @forelse ($categories as $category)
             <a
                 href="{{ route('umkm.index', ['category' => $category->slug]) }}"
-                class="group rounded-2xl border border-gray-100 bg-white p-5 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#CFE5E2] hover:shadow-lg"
+                class="group rounded-2xl text-center transition duration-300 sm:border sm:border-gray-100 sm:bg-white sm:p-5 sm:shadow-sm sm:hover:-translate-y-1 sm:hover:border-[#CFE5E2] sm:hover:shadow-lg"
             >
 
-                <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#CFE5E2]/60 text-[#326AAB] transition group-hover:bg-[#326AAB]/10">
+                <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[#326AAB] shadow-sm transition group-hover:bg-[#326AAB]/10 sm:bg-[#CFE5E2]/60 sm:shadow-none">
                     <x-category-icon :category="$category" />
                 </div>
 
-                <h3 class="mt-4 text-sm font-bold text-[#174875] transition group-hover:text-[#326AAB]">
+                <h3 class="mt-2 text-[11px] font-semibold leading-tight text-[#174875] transition group-hover:text-[#326AAB] sm:mt-4 sm:text-sm sm:font-bold">
                     {{ $category->name }}
                 </h3>
 
-                <p class="mt-2 text-xs text-gray-500">
+                <p class="mt-2 hidden text-xs text-gray-500 sm:block">
                     {{ $category->umkms_count }} UMKM
                 </p>
 
             </a>
         @empty
-            <div class="rounded-2xl border border-dashed border-gray-300 bg-white p-8 sm:col-span-3 lg:col-span-6">
+            <div class="col-span-full rounded-2xl border border-dashed border-gray-300 bg-white p-8">
                 <p class="font-semibold text-gray-800">
                     Kategori belum tersedia.
                 </p>
@@ -332,11 +336,11 @@
     </div>
 
     {{-- UMKM Cards --}}
-    <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="-mx-5 mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
 
         @forelse ($featuredUmkms as $umkm)
 
-            <article class="group flex h-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#CFE5E2] hover:shadow-xl">
+            <article class="group flex h-full w-[82%] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#CFE5E2] hover:shadow-xl sm:w-auto">
 
                 {{-- Cover Image --}}
                 <a
@@ -464,7 +468,7 @@
 
         @empty
 
-            <div class="rounded-2xl border border-dashed border-[#CFE5E2] bg-white p-8 sm:col-span-2 lg:col-span-3">
+            <div class="w-full shrink-0 rounded-2xl border border-dashed border-[#CFE5E2] bg-white p-8 sm:col-span-2 lg:col-span-3">
                 <div class="mx-auto max-w-md py-5 text-center">
 
                     <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#CFE5E2]/60 text-[#326AAB]">
@@ -595,6 +599,42 @@
 
     </div>
 </section>
+
+
+{{-- Berita Terbaru --}}
+@if ($latestPosts->isNotEmpty())
+    <section class="mx-auto max-w-7xl px-5 py-14 lg:px-8">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+                <p class="text-sm font-bold uppercase tracking-[0.15em] text-[#326AAB]">
+                    Kabar Tanjung Mas
+                </p>
+
+                <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-[#174875] sm:text-3xl">
+                    Berita Terbaru
+                </h2>
+
+                <p class="mt-2 max-w-xl text-sm leading-6 text-gray-500 sm:text-base">
+                    Kegiatan, pelatihan, dan kabar terbaru seputar UMKM Kelurahan Tanjung Mas.
+                </p>
+            </div>
+
+            <a
+                href="{{ route('posts.index') }}"
+                class="inline-flex w-fit shrink-0 items-center gap-2 text-sm font-semibold text-[#326AAB] transition hover:gap-3"
+            >
+                Semua berita
+                <span aria-hidden="true">&rarr;</span>
+            </a>
+        </div>
+
+        <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            @foreach ($latestPosts as $post)
+                <x-post-card :post="$post" />
+            @endforeach
+        </div>
+    </section>
+@endif
 
 
 {{-- Tentang --}}

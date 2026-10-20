@@ -157,8 +157,19 @@
             // Titik pusat awal peta di sekitar Semarang.
             // Ini hanya pusat tampilan, bukan penanda lokasi UMKM.
             const defaultCenter = [-6.95, 110.42];
+            const mapElement = document.getElementById('umkm-map');
 
-            const map = L.map('umkm-map').setView(defaultCenter, 13);
+            // Pustaka peta dimuat dari CDN; tampilkan pesan jika gagal dimuat.
+            if (typeof L === 'undefined') {
+                mapElement.innerHTML =
+                    '<div style="display:flex;height:100%;align-items:center;justify-content:center;padding:24px;text-align:center;color:#6b7280;font-size:14px">' +
+                    'Peta tidak dapat dimuat. Periksa koneksi internet lalu muat ulang halaman.' +
+                    '</div>';
+
+                return;
+            }
+
+            const map = L.map(mapElement).setView(defaultCenter, 13);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Post;
 use App\Models\Product;
 use App\Models\Umkm;
 use Illuminate\View\View;
@@ -16,7 +17,7 @@ class HomeController extends Controller
                 'umkms' => fn ($query) => $query
                     ->where('status', 'published'),
             ])
-            ->orderBy('name')
+            ->ordered()
             ->get();
 
         $featuredUmkms = Umkm::query()
@@ -50,7 +51,14 @@ class HomeController extends Controller
                 ->where('status', 'published'))
             ->count();
 
+        $latestPosts = Post::query()
+            ->published()
+            ->latest('published_at')
+            ->take(3)
+            ->get();
+
         return view('home', compact(
+            'latestPosts',
             'categories',
             'featuredUmkms',
             'latestProducts',

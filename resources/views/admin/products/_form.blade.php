@@ -98,8 +98,9 @@
                     name="price"
                     type="number"
                     min="0"
-                    step="0.01"
-                    value="{{ old('price', $product->price ?? '') }}"
+                    step="1"
+                    inputmode="numeric"
+                    value="{{ old('price', isset($product) && $product->price !== null ? (int) round((float) $product->price) : '') }}"
                     class="w-full rounded-xl border-gray-300 px-4 py-3 focus:border-[#326AAB] focus:ring-[#326AAB]"
                     placeholder="15000"
                 >
@@ -158,8 +159,10 @@
             name="image"
             type="file"
             accept=".jpg,.jpeg,.png,.webp"
-            class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm"
+            data-image-preview="image-preview"
         >
+
+        <img id="image-preview" alt="" class="mt-4 hidden h-40 w-56 rounded-xl border border-gray-200 object-cover">
 
         <p class="mt-2 text-xs text-gray-400">
             Format JPG, JPEG, PNG, atau WEBP. Maksimal 4 MB.
@@ -169,6 +172,57 @@
         @error('image')
             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
         @enderror
+
+        {{-- Galeri --}}
+        <div class="mt-8 border-t border-gray-100 pt-6">
+            <h4 class="text-base font-semibold text-gray-900">Galeri foto tambahan</h4>
+            <p class="mt-1 text-sm text-gray-500">
+                Tampil sebagai thumbnail di halaman produk. Maksimal 8 foto.
+            </p>
+
+            @if ($isEdit && $product->images->isNotEmpty())
+                <div class="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6">
+                    @foreach ($product->images as $galleryImage)
+                        <label class="group relative block cursor-pointer overflow-hidden rounded-xl border border-gray-200 bg-white">
+                            <img src="{{ asset('storage/' . $galleryImage->path) }}" alt="Foto galeri {{ $loop->iteration }}" class="aspect-square w-full object-cover">
+                            <span class="flex items-center gap-2 border-t border-gray-100 px-2 py-1.5 text-xs text-gray-600">
+                                <input type="checkbox" name="remove_gallery[]" value="{{ $galleryImage->id }}">
+                                Hapus
+                            </span>
+                        </label>
+                    @endforeach
+                </div>
+            @endif
+
+            <label for="gallery" class="mb-2 mt-5 block text-sm font-medium text-gray-700">
+                Tambah foto galeri
+            </label>
+
+            <input
+                id="gallery"
+                name="gallery[]"
+                type="file"
+                multiple
+                accept=".jpg,.jpeg,.png,.webp"
+                data-gallery-preview="gallery-preview"
+            >
+
+            <div id="gallery-preview" class="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6"></div>
+
+            <p class="mt-2 text-xs text-gray-400">
+                Bisa memilih beberapa foto sekaligus. Format JPG, PNG, atau WEBP, maksimal 4 MB per foto.
+            </p>
+
+            @error('gallery')
+                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+            @enderror
+
+            @foreach ($errors->get('gallery.*') as $galleryErrors)
+                @foreach ($galleryErrors as $galleryError)
+                    <p class="mt-2 text-sm text-red-600">{{ $galleryError }}</p>
+                @endforeach
+            @endforeach
+        </div>
     </div>
 
     {{-- Publikasi --}}
@@ -192,14 +246,14 @@
                     value="draft"
                     @selected(old('status', $product->status ?? 'draft') === 'draft')
                 >
-                    Draft — belum tampil ke publik
+                    Draf — belum tampil ke publik
                 </option>
 
                 <option
                     value="published"
                     @selected(old('status', $product->status ?? 'draft') === 'published')
                 >
-                    Published — tampil ke publik
+                    Terbit — tampil ke publik
                 </option>
             </select>
 

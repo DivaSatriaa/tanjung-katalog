@@ -23,3 +23,124 @@ if (menuButton && mobileMenu) {
         }
     });
 }
+
+document.querySelectorAll('[data-gallery]').forEach((gallery) => {
+    const mainImage = gallery.querySelector('[data-gallery-main]');
+    const thumbnails = gallery.querySelectorAll('[data-gallery-thumb]');
+
+    if (!mainImage) {
+        return;
+    }
+
+    thumbnails.forEach((thumbnail) => {
+        thumbnail.addEventListener('click', () => {
+            mainImage.src = thumbnail.dataset.src;
+
+            thumbnails.forEach((item) => item.removeAttribute('aria-current'));
+            thumbnail.setAttribute('aria-current', 'true');
+        });
+    });
+});
+
+const MAX_IMAGE_DIMENSION = 1920;
+const COMPRESS_THRESHOLD_BYTES = 1024 * 1024;
+
+/**
+ * Perkecil foto besar (misalnya dari kamera ponsel) sebelum diunggah agar
+ * tidak melebihi batas ukuran unggahan server.
+ */
+async function shrinkImage(file) {
+    const isCompressible = ['image/jpeg', 'image/webp', 'image/png'].includes(file.type);
+
+    if (!isCompressible || file.size <= COMPRESS_THRESHOLD_BYTES) {
+        return file;
+    }
+
+    try {
+        const bitmap = await createImageBitmap(file);
+        const scale = Math.min(1, MAX_IMAGE_DIMENSION / Math.max(bitmap.width, bitmap.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(bitmap.width * scale);
+        canvas.height = Math.round(bitmap.height * scale);
+
+        const context = canvas.getContext('2d');
+        context.fillStyle = '#ffffff';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+        bitmap.close();
+
+        const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.85));
+
+        if (!blob || blob.size >= file.size) {
+            return file;
+        }
+
+        const name = file.name.replace(/\.[^.]+$/, '') + '.jpg';
+
+        return new File([blob], name, { type: 'image/jpeg', lastModified: Date.now() });
+    } catch {
+        return file;
+    }
+}
+
+function renderPreviews(input) {
+    const singlePreview = document.getElementById(input.dataset.imagePreview ?? '');
+    const galleryPreview = document.getElementById(input.dataset.galleryPreview ?? '');
+
+    if (singlePreview) {
+        const [file] = input.files;
+
+        if (file) {
+            singlePreview.src = URL.createObjectURL(file);
+            singlePreview.classList.remove('hidden');
+        } else {
+            singlePreview.classList.add('hidden');
+            singlePreview.removeAttribute('src');
+        }
+    }
+
+    if (galleryPreview) {
+        galleryPreview.replaceChildren();
+
+        Array.from(input.files).forEach((file) => {
+            const image = document.createElement('img');
+            image.src = URL.createObjectURL(file);
+            image.alt = '';
+            image.className = 'aspect-square w-full rounded-xl border border-gray-200 object-cover';
+            galleryPreview.append(image);
+        });
+    }
+}
+
+document.querySelectorAll('.admin-panel input[type="file"]').forEach((input) => {
+    const form = input.closest('form');
+    const submitButtons = form ? form.querySelectorAll('button[type="submit"]') : [];
+
+    input.addEventListener('change', async () => {
+        if (input.files.length === 0) {
+            renderPreviews(input);
+
+            return;
+        }
+
+        submitButtons.forEach((button) => {
+            button.disabled = true;
+        });
+
+        try {
+            const files = await Promise.all(Array.from(input.files).map(shrinkImage));
+
+            if (typeof DataTransfer !== 'undefined') {
+                const transfer = new DataTransfer();
+                files.forEach((file) => transfer.items.add(file));
+                input.files = transfer.files;
+            }
+        } finally {
+            submitButtons.forEach((button) => {
+                button.disabled = false;
+            });
+
+            renderPreviews(input);
+        }
+    });
+});

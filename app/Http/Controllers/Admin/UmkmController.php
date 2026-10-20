@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\ProductImage;
 use App\Models\Umkm;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -205,7 +206,12 @@ class UmkmController extends Controller
             ->pluck('image')
             ->all();
 
-        Storage::disk('public')->delete($productImages);
+        $galleryImages = ProductImage::query()
+            ->whereIn('product_id', $umkm->products()->select('id'))
+            ->pluck('path')
+            ->all();
+
+        Storage::disk('public')->delete([...$productImages, ...$galleryImages]);
 
         $umkm->delete();
 

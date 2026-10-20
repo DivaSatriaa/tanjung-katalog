@@ -2,7 +2,11 @@
 
 @section('title', $umkm->name)
 
-@section('meta_description', $umkm->description ?: 'Profil UMKM ' . $umkm->name . ' di Kelurahan Tanjung Mas.')
+@section('meta_description', \Illuminate\Support\Str::limit($umkm->description ?: 'Profil UMKM ' . $umkm->name . ' di Kelurahan Tanjung Mas.', 160))
+
+@if ($umkm->cover_image)
+    @section('meta_image', asset('storage/' . $umkm->cover_image))
+@endif
 
 @section('content')
 
@@ -27,7 +31,7 @@
                 >
             @else
                 <div class="flex min-h-72 items-center justify-center">
-                    <span class="text-7xl">🏪</span>
+                    <x-icon name="store" class="h-16 w-16" />
                 </div>
             @endif
         </div>
@@ -48,9 +52,7 @@
                 </p>
             @endif
 
-            <p class="mt-5 whitespace-pre-line leading-7 text-gray-600">
-                {{ $umkm->description ?: 'Informasi lengkap mengenai usaha ini akan ditambahkan.' }}
-            </p>
+            <p class="mt-5 whitespace-pre-line break-words leading-7 text-gray-600">{{ $umkm->description ?: 'Informasi lengkap mengenai usaha ini akan ditambahkan.' }}</p>
 
             @if ($umkm->address)
                 <div class="mt-6">
@@ -166,7 +168,7 @@
                             >
                         @else
                             <div class="flex h-full w-full items-center justify-center">
-                                <span class="text-4xl" aria-hidden="true">📦</span>
+                                <x-icon name="box" class="h-10 w-10" />
                             </div>
                         @endif
                     </a>
