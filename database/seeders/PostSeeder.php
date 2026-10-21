@@ -3,11 +3,14 @@
 namespace Database\Seeders;
 
 use App\Models\Post;
+use Database\Seeders\Concerns\SeedsImages;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
 class PostSeeder extends Seeder
 {
+    use SeedsImages;
+
     /**
      * Seed contoh berita kegiatan UMKM.
      *
@@ -34,15 +37,30 @@ class PostSeeder extends Seeder
                 'body' => "Bazar produk olahan ikan digelar di kawasan Kampung Bahari dengan menghadirkan berbagai produk khas pesisir, mulai dari bandeng presto, kerupuk ikan, hingga abon ikan.\n\nKegiatan ini menjadi ajang promosi sekaligus mempertemukan pelaku usaha dengan pembeli dari luar kelurahan.",
                 'days_ago' => 21,
             ],
+            [
+                'title' => 'Kampung Bahari Tambak Lorok Bersolek Jadi Wisata Pesisir',
+                'excerpt' => 'Kampung nelayan Tambak Lorok kini makin tertata dan mulai dilirik wisatawan.',
+                'body' => "Kampung Bahari Tambak Lorok terus berbenah. Deretan perahu nelayan yang berwarna-warni, pasar ikan, dan sentra pengasapan ikan kini menjadi daya tarik bagi pengunjung dari luar kota.\n\nPelaku UMKM setempat ikut merasakan dampaknya. Produk seperti ikan asap, kerang hijau, dan kerajinan kerang semakin banyak dicari sebagai oleh-oleh.\n\nWarga berharap penataan kawasan ini terus berlanjut agar ekonomi pesisir Tanjung Mas semakin kuat.",
+                'days_ago' => 30,
+            ],
+            [
+                'title' => 'Kemasan Menarik Bantu Produk UMKM Naik Kelas',
+                'excerpt' => 'Pelaku usaha belajar memilih kemasan, label, dan informasi produk yang tepat.',
+                'body' => "Puluhan pelaku UMKM Tanjung Mas mengikuti pendampingan kemasan produk. Materi yang dibahas mulai dari memilih bahan kemasan yang aman untuk makanan, membuat label yang jelas, hingga mencantumkan informasi komposisi dan tanggal kedaluwarsa.\n\nKemasan yang rapi membuat produk lebih dipercaya pembeli dan siap dipasarkan ke toko oleh-oleh maupun secara daring.\n\nPeserta juga didorong untuk mendaftarkan izin PIRT agar produknya dapat menjangkau pasar yang lebih luas.",
+                'days_ago' => 45,
+            ],
         ];
 
         foreach ($posts as $post) {
+            $slug = Str::slug($post['title']);
+
             Post::query()->updateOrCreate(
-                ['slug' => Str::slug($post['title'])],
+                ['slug' => $slug],
                 [
                     'title' => $post['title'],
                     'excerpt' => $post['excerpt'],
                     'body' => $post['body'],
+                    'cover_image' => $this->seedImage("posts/{$slug}.jpg"),
                     'status' => 'published',
                     'published_at' => now()->subDays($post['days_ago'])->setTime(9, 0),
                 ],
