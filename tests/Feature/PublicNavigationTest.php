@@ -29,4 +29,14 @@ class PublicNavigationTest extends TestCase
             ->assertOk()
             ->assertSee('aria-current="page"', false);
     }
+
+    public function test_public_pages_and_admin_login_show_kelurahan_emblem(): void
+    {
+        foreach ([route('home'), route('umkm.index'), route('admin.login')] as $url) {
+            $this->get($url)
+                ->assertOk()
+                ->assertSee('images/lambang-kota-semarang.png', false)
+                ->assertSee('alt="Lambang Kota Semarang"', false);
+        }
+    }
 }

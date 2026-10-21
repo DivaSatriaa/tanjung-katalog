@@ -22,11 +22,19 @@
     <main class="w-full max-w-md">
 
         <div class="text-center">
-            <a href="{{ route('home') }}" class="inline-block">
+            <a href="{{ route('home') }}" class="inline-flex items-center gap-4">
+                <img
+                    src="{{ asset('images/lambang-kota-semarang.png') }}"
+                    alt="Lambang Kota Semarang"
+                    class="h-14 w-auto"
+                >
+
+                <span class="h-12 w-px bg-[#CFE5E2]" aria-hidden="true"></span>
+
                 <img
                     src="{{ asset('images/tanjungkatalog-logo.png') }}"
                     alt="TanjungKatalog — Katalog UMKM Kelurahan Tanjung Mas"
-                    class="mx-auto h-auto w-64"
+                    class="h-auto w-56"
                 >
             </a>
         </div>
