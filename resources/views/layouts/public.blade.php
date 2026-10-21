@@ -79,11 +79,19 @@
     <div class="flex w-full items-center justify-between gap-6 px-5 py-3 sm:px-7 lg:px-10 xl:px-12">
 
         {{-- Logo --}}
-        <a href="{{ route('home') }}" class="shrink-0">
+        <a href="{{ route('home') }}" class="flex shrink-0 items-center gap-3 sm:gap-4">
+            <img
+                src="{{ asset('images/lambang-kota-semarang.png') }}"
+                alt="Lambang Kota Semarang"
+                class="h-10 w-auto sm:h-12"
+            >
+
+            <span class="h-9 w-px bg-gray-200 sm:h-10" aria-hidden="true"></span>
+
             <img
                 src="{{ asset('images/tanjungkatalog-logo.png') }}"
                 alt="TanjungKatalog — Katalog UMKM Kelurahan Tanjung Mas"
-                class="h-auto w-44 object-contain sm:w-60"
+                class="h-auto w-40 object-contain sm:w-56"
             >
         </a>
 
@@ -206,6 +214,27 @@
                     Katalog digital untuk mengenalkan usaha dan produk lokal warga
                     Kelurahan Tanjung Mas, Semarang. Dukung UMKM, majukan Tanjung Mas.
                 </p>
+
+                <div class="mt-6 inline-flex items-center gap-3 rounded-2xl border border-gray-100 bg-[#F8FCFD] py-3 pl-3 pr-5">
+                    <img
+                        src="{{ asset('images/lambang-kota-semarang.png') }}"
+                        alt="Lambang Kota Semarang"
+                        class="h-12 w-auto"
+                        loading="lazy"
+                    >
+
+                    <div class="leading-tight">
+                        <p class="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+                            Pemerintah Kota Semarang
+                        </p>
+                        <p class="mt-0.5 text-sm font-bold text-[#174875]">
+                            Kelurahan Tanjung Mas
+                        </p>
+                        <p class="mt-0.5 text-xs text-gray-500">
+                            Kecamatan Semarang Utara
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <div>
