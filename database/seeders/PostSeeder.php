@@ -5,66 +5,137 @@ namespace Database\Seeders;
 use App\Models\Post;
 use Database\Seeders\Concerns\SeedsImages;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PostSeeder extends Seeder
 {
     use SeedsImages;
 
+    private const SOURCE_URL = 'https://tanjungmas.semarangkota.go.id/umkm/';
+
     /**
-     * Seed contoh berita kegiatan UMKM.
+     * Berita contoh fiktif dari versi sebelumnya yang diganti berita kelurahan.
      *
-     * Isi berita bersifat contoh dan perlu diganti dengan kabar asli.
+     * @var array<int, string>
+     */
+    private const LEGACY_DEMO_POST_SLUGS = [
+        'pelatihan-foto-produk-dengan-ponsel-untuk-pelaku-umkm',
+        'tanjungkatalog-resmi-hadir-sebagai-etalase-digital-umkm',
+        'bazar-produk-olahan-ikan-ramaikan-kampung-bahari',
+        'kampung-bahari-tambak-lorok-bersolek-jadi-wisata-pesisir',
+        'kemasan-menarik-bantu-produk-umkm-naik-kelas',
+    ];
+
+    /**
+     * Seed berita UMKM dari halaman UMKM situs resmi Kelurahan Tanjung Mas.
      */
     public function run(): void
     {
+        $this->removeLegacyDemoPosts();
+
+        /** @var array<int, array{title: string, excerpt: string, body: string, image: string, source: string, published_at: string}> $posts */
         $posts = [
             [
-                'title' => 'Pelatihan Foto Produk dengan Ponsel untuk Pelaku UMKM',
-                'excerpt' => 'Pelaku UMKM belajar memotret produk agar tampil lebih menarik di katalog digital.',
-                'body' => "Pelaku UMKM Kelurahan Tanjung Mas mengikuti pelatihan foto produk menggunakan ponsel. Peserta belajar memanfaatkan cahaya alami, memilih latar sederhana, dan mengatur sudut pengambilan gambar.\n\nHasil foto dari pelatihan ini akan dipakai untuk memperbarui tampilan produk di TanjungKatalog sehingga calon pembeli lebih mudah mengenali produk lokal.\n\nPelatihan serupa direncanakan rutin agar semakin banyak pelaku usaha yang siap memasarkan produknya secara digital.",
-                'days_ago' => 3,
+                'title' => 'Workshop Branding Industri Program Kemitraan Masyarakat Udinus di Aula Kelurahan Tanjung Mas',
+                'excerpt' => 'Camat Semarang Utara membuka workshop teknik logo sebagai media promosi produk UMKM.',
+                'body' => "Semarang (28/7/2022) Camat Semarang Utara Drs. Margo Haryadi, M.M. membuka Workshop Branding Industri dengan mengangkat tema \"teknik logo sebagai media promosi produk UMKM dalam meningkatkan nilai jual produk\" dalam rangka mendukung kelurahan ramah perempuan dan peduli anak di Balai Kelurahan Tanjung Mas.\n\nKegiatan tersebut merupakan Program Kemitraan Masyarakat (PKM) Udinus Semarang yang juga dihadiri Luky Widyastuti Puspitaningrum, S.STP, M.Si selaku Sub Koordinator Peningkatan Kualitas Keluarga Dinas Pemberdayaan Perempuan dan Perlindungan Anak Kota Semarang, Elkaf Rahmawan Pramudya, S.Kom., M.Kom. yang juga Dosen Desain Komunikasi Visual (DKV) Universitas Dian Nuswantoro Semarang, Ibu Ika perwakilan Yayasan Anantaka, serta warga Kelurahan Tanjung Mas pengelola UMKM.",
+                'image' => 'workshop-branding-industri-pkm-udinus-di-aula-kelurahan-tanjung-mas.jpg',
+                'source' => 'workshop-branding-industri-program-kemitraan-masyarakat-udinus-di-aula-kelurahan-tanjung-mas',
+                'published_at' => '2022-08-01',
             ],
             [
-                'title' => 'TanjungKatalog Resmi Hadir sebagai Etalase Digital UMKM',
-                'excerpt' => 'Katalog digital ini memudahkan warga menemukan usaha dan produk lokal Tanjung Mas.',
-                'body' => "TanjungKatalog hadir sebagai etalase digital bagi usaha mikro, kecil, dan menengah di Kelurahan Tanjung Mas. Melalui katalog ini, warga dapat melihat profil usaha, daftar produk, hingga lokasi UMKM di peta.\n\nPengunjung dapat langsung menghubungi penjual melalui WhatsApp dari halaman produk. Pelaku usaha yang ingin terdaftar dapat menghubungi pengelola di kantor kelurahan.",
-                'days_ago' => 10,
+                'title' => 'Pengurus Gerai KOPIMI Ikut Sosialisasi Perizinan Usaha melalui OSS',
+                'excerpt' => 'Pengurus Gerai KOPIMI aktif dalam sosialisasi OSS bersama Dinas Koperasi dan Usaha Mikro Kota Semarang.',
+                'body' => 'Selasa (11/2), pengurus Gerai KOPIMI turut berperan aktif dalam sosialisasi perizinan usaha melalui OSS (Online Single Submission) bersama Dinas Koperasi dan Usaha Mikro Kota Semarang.',
+                'image' => 'pengurus-gerai-kopimi-ikut-sosialisasi-perizinan-usaha-melalui-oss.jpg',
+                'source' => 'osskopimiumkm',
+                'published_at' => '2020-02-14',
             ],
             [
-                'title' => 'Bazar Produk Olahan Ikan Ramaikan Kampung Bahari',
-                'excerpt' => 'Aneka olahan ikan khas pesisir dipamerkan dan dijual langsung oleh pelaku UMKM.',
-                'body' => "Bazar produk olahan ikan digelar di kawasan Kampung Bahari dengan menghadirkan berbagai produk khas pesisir, mulai dari bandeng presto, kerupuk ikan, hingga abon ikan.\n\nKegiatan ini menjadi ajang promosi sekaligus mempertemukan pelaku usaha dengan pembeli dari luar kelurahan.",
-                'days_ago' => 21,
+                'title' => 'Pelatihan Pemasaran Pengurus Gerai KOPIMI bersama Tokopedia',
+                'excerpt' => 'Pengurus Gerai KOPIMI mengikuti pelatihan pemasaran bersama Tokopedia.',
+                'body' => 'Kamis (26/12), pengurus Gerai KOPIMI Kelurahan Tanjung Mas mengikuti pelatihan pemasaran bersama Tokopedia.',
+                'image' => 'pelatihan-pemasaran-pengurus-gerai-kopimi-bersama-tokopedia.jpg',
+                'source' => 'kopimitokopedia',
+                'published_at' => '2019-12-26 10:00',
             ],
             [
-                'title' => 'Kampung Bahari Tambak Lorok Bersolek Jadi Wisata Pesisir',
-                'excerpt' => 'Kampung nelayan Tambak Lorok kini makin tertata dan mulai dilirik wisatawan.',
-                'body' => "Kampung Bahari Tambak Lorok terus berbenah. Deretan perahu nelayan yang berwarna-warni, pasar ikan, dan sentra pengasapan ikan kini menjadi daya tarik bagi pengunjung dari luar kota.\n\nPelaku UMKM setempat ikut merasakan dampaknya. Produk seperti ikan asap, kerang hijau, dan kerajinan kerang semakin banyak dicari sebagai oleh-oleh.\n\nWarga berharap penataan kawasan ini terus berlanjut agar ekonomi pesisir Tanjung Mas semakin kuat.",
-                'days_ago' => 30,
+                'title' => 'Rapat Koordinasi bersama Pengurus Gerai KOPIMI Kelurahan Tanjung Mas',
+                'excerpt' => 'Rapat koordinasi bersama pengurus Gerai KOPIMI Kelurahan Tanjung Mas.',
+                'body' => 'Jumat (20/12), Kelurahan Tanjung Mas mengadakan rapat koordinasi bersama pengurus Gerai KOPIMI Kelurahan Tanjung Mas.',
+                'image' => 'rapat-koordinasi-pengurus-gerai-kopimi-kelurahan-tanjung-mas.jpg',
+                'source' => 'rakorgeraimi',
+                'published_at' => '2019-12-26 09:00',
             ],
             [
-                'title' => 'Kemasan Menarik Bantu Produk UMKM Naik Kelas',
-                'excerpt' => 'Pelaku usaha belajar memilih kemasan, label, dan informasi produk yang tepat.',
-                'body' => "Puluhan pelaku UMKM Tanjung Mas mengikuti pendampingan kemasan produk. Materi yang dibahas mulai dari memilih bahan kemasan yang aman untuk makanan, membuat label yang jelas, hingga mencantumkan informasi komposisi dan tanggal kedaluwarsa.\n\nKemasan yang rapi membuat produk lebih dipercaya pembeli dan siap dipasarkan ke toko oleh-oleh maupun secara daring.\n\nPeserta juga didorong untuk mendaftarkan izin PIRT agar produknya dapat menjangkau pasar yang lebih luas.",
-                'days_ago' => 45,
+                'title' => 'Kunjungan Dinas Sosial Kota Probolinggo dan Kota Semarang ke Galeri Olahan Ikan Asin Tawangsari',
+                'excerpt' => 'Dinas Sosial Kota Probolinggo dan Kota Semarang mengunjungi home industri UMKM di Tawangsari.',
+                'body' => 'Jumat (29/11), Dinas Sosial Kota Probolinggo bersama Dinas Sosial Kota Semarang berkunjung ke home industri UMKM dan galeri olahan ikan asin di Tawangsari, Kelurahan Tanjung Mas.',
+                'image' => 'kunjungan-dinas-sosial-probolinggo-dan-semarang-ke-galeri-olahan-ikan-asin-tawangsari.jpg',
+                'source' => 'kunjungandinsosprobolinggo',
+                'published_at' => '2019-11-29',
+            ],
+            [
+                'title' => 'UMKM Kelurahan Tanjung Mas Ikuti Bazar Pengabdian Masyarakat Sekolah Inspektur Polisi Akpol Semarang',
+                'excerpt' => 'UMKM Kelurahan Tanjung Mas mengikuti bazar di Kecamatan Semarang Utara.',
+                'body' => 'UMKM Kelurahan Tanjung Mas mengikuti bazar dalam rangka mendukung kegiatan pengabdian masyarakat Sekolah Inspektur Polisi Akpol Semarang. Kegiatan bertempat di Kecamatan Semarang Utara pada 19 Agustus 2019.',
+                'image' => 'umkm-tanjung-mas-ikuti-bazar-pengabdian-masyarakat-sip-akpol-semarang.jpg',
+                'source' => 'akmil',
+                'published_at' => '2019-05-29 11:00',
+            ],
+            [
+                'title' => 'UMKM Kelurahan Tanjung Mas pada Perayaan HUT RI ke-73',
+                'excerpt' => 'UMKM Kelurahan Tanjung Mas turut meramaikan perayaan HUT RI ke-73.',
+                'body' => 'UMKM Kelurahan Tanjung Mas turut meramaikan kegiatan perayaan HUT RI ke-73.',
+                'image' => 'umkm-kelurahan-tanjung-mas-meriahkan-hut-ri-ke-73.jpg',
+                'source' => 'umkm',
+                'published_at' => '2019-05-29 10:00',
+            ],
+            [
+                'title' => 'Hasil Kerajinan UMKM dari Kulit Kerang',
+                'excerpt' => 'Kerajinan hiasan karya UMKM Kelurahan Tanjung Mas yang dibuat dari kulit kerang.',
+                'body' => 'Hasil kerajinan UMKM Kelurahan Tanjung Mas yang dibuat dari kulit kerang.',
+                'image' => 'hasil-kerajinan-umkm-dari-kulit-kerang.jpg',
+                'source' => 'umkmkerajinankulitkerang',
+                'published_at' => '2019-05-29 09:00',
+            ],
+            [
+                'title' => 'Gerai UMKM Kelurahan Tanjung Mas',
+                'excerpt' => 'Gerai UMKM bantuan CSR Petronas diresmikan untuk menampung UMKM Kelurahan Tanjung Mas.',
+                'body' => "Dibangun oleh CSR PETRONAS, Kelurahan Tanjung Mas memperoleh bantuan pembangunan gerai UMKM untuk menampung UMKM yang ada di Kelurahan Tanjung Mas guna meningkatkan perekonomian warga.\n\nGerai diresmikan pada tanggal 30 Oktober 2018 oleh istri Wali Kota Semarang dan segenap jajaran PETRONAS.",
+                'image' => 'gerai-umkm-kelurahan-tanjung-mas.jpg',
+                'source' => 'geraiumkmkelurahantanjungmas',
+                'published_at' => '2019-05-26',
             ],
         ];
 
         foreach ($posts as $post) {
-            $slug = Str::slug($post['title']);
-
             Post::query()->updateOrCreate(
-                ['slug' => $slug],
+                ['slug' => Str::slug($post['title'])],
                 [
                     'title' => $post['title'],
                     'excerpt' => $post['excerpt'],
-                    'body' => $post['body'],
-                    'cover_image' => $this->seedImage("posts/{$slug}.jpg"),
+                    'body' => $post['body']."\n\nSumber: situs resmi Kelurahan Tanjung Mas, ".self::SOURCE_URL.$post['source'],
+                    'cover_image' => $this->seedImage('posts/'.$post['image']),
                     'status' => 'published',
-                    'published_at' => now()->subDays($post['days_ago'])->setTime(9, 0),
+                    'published_at' => $post['published_at'],
                 ],
             );
         }
+    }
+
+    private function removeLegacyDemoPosts(): void
+    {
+        Post::query()
+            ->whereIn('slug', self::LEGACY_DEMO_POST_SLUGS)
+            ->get()
+            ->each(function (Post $post): void {
+                if ($post->cover_image) {
+                    Storage::disk('public')->delete($post->cover_image);
+                }
+
+                $post->delete();
+            });
     }
 }

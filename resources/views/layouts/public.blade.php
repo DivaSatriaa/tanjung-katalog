@@ -34,6 +34,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+    {{-- Sembunyikan elemen animasi sejak awal agar tidak berkedip; dibatalkan bila app.js gagal dimuat. --}}
+    <script>
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.documentElement.classList.add('motion-ready');
+            window.setTimeout(function () {
+                if (!window.tanjungMotionStarted) {
+                    document.documentElement.classList.remove('motion-ready');
+                }
+            }, 2500);
+        }
+    </script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
@@ -75,7 +87,7 @@
     ];
 @endphp
 
-<header class="sticky top-0 z-40 border-b border-gray-100 bg-white/95 backdrop-blur">
+<header data-site-header class="sticky top-0 z-40 border-b border-gray-100 bg-white/95 backdrop-blur transition-shadow duration-300">
     <div class="flex w-full items-center justify-between gap-6 px-5 py-3 sm:px-7 lg:px-10 xl:px-12">
 
         {{-- Logo --}}
@@ -275,7 +287,7 @@
                     class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#326AAB] hover:underline"
                 >
                     Lihat peta UMKM
-                    <span aria-hidden="true">&rarr;</span>
+                    <span class="arrow-nudge" aria-hidden="true">&rarr;</span>
                 </a>
             </div>
 

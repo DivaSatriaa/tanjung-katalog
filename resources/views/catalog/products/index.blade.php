@@ -207,7 +207,7 @@
             @endif
 
             {{-- Grid produk --}}
-            <div class="mt-6 grid grid-cols-2 gap-4 sm:gap-5 xl:grid-cols-3">
+            <div class="mt-6 grid grid-cols-2 gap-4 sm:gap-5 xl:grid-cols-3" data-reveal-group>
 
                 @forelse ($products as $product)
                     <x-product-card :product="$product" />
@@ -226,7 +226,7 @@
                             class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#326AAB] hover:underline"
                         >
                             Lihat semua produk
-                            <span aria-hidden="true">→</span>
+                            <span class="arrow-nudge" aria-hidden="true">→</span>
                         </a>
                     </div>
                 @endforelse

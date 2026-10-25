@@ -204,7 +204,7 @@
                             class="mt-auto mt-4 inline-flex items-center justify-center gap-2 rounded-xl border border-[#326AAB]/30 px-3 py-2.5 text-sm font-semibold text-[#326AAB] transition hover:border-[#326AAB] hover:bg-[#326AAB] hover:text-white"
                         >
                             Lihat Produk
-                            <span aria-hidden="true">→</span>
+                            <span class="arrow-nudge" aria-hidden="true">→</span>
                         </a>
 
                     </div>

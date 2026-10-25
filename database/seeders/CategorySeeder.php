@@ -15,6 +15,8 @@ class CategorySeeder extends Seeder
     {
         $names = [
             'Makanan & Minuman',
+            'Sembako & Kelontong',
+            'Jasa',
             'Kerajinan',
             'Fashion',
             'Perikanan',
