@@ -36,7 +36,7 @@ class HomeController extends Controller
             ->where('status', 'published')
             ->whereHas('umkm', fn ($query) => $query
                 ->where('status', 'published'))
-            ->with('umkm')
+            ->with('umkm.category')
             ->latest()
             ->take(4)
             ->get();

@@ -208,7 +208,7 @@
                                 class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#326AAB] hover:text-[#174875]"
                             >
                                 Lihat Profil UMKM
-                                <span aria-hidden="true">→</span>
+                                <span class="arrow-nudge" aria-hidden="true">→</span>
                             </a>
                         </div>
                     </div>

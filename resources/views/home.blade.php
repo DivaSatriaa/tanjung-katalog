@@ -16,7 +16,7 @@
            <div class="relative grid grid-cols-[minmax(0,1fr)] items-center gap-8 px-6 py-8 sm:px-10 sm:py-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8 lg:px-12 lg:py-10 xl:px-14 xl:py-12">
 
             {{-- Headline --}}
-            <div class="relative z-10">
+            <div class="hero-enter relative z-10">
 
                 <span class="inline-flex items-center gap-2 rounded-full border border-[#CFE5E2] bg-white/80 px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#326AAB]">
                     <span class="h-2 w-2 rounded-full bg-[#6EA8C7]"></span>
@@ -83,7 +83,7 @@
                         class="inline-flex items-center justify-center gap-2 rounded-full bg-[#326AAB] px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-[#326AAB]/20 transition hover:-translate-y-0.5 hover:bg-[#28598f]"
                     >
                         Lihat Katalog
-                        <span aria-hidden="true">&rarr;</span>
+                        <span class="arrow-nudge" aria-hidden="true">&rarr;</span>
                     </a>
 
                     <a
@@ -111,7 +111,7 @@
                     <img
                         src="{{ asset('images/tanjung-mas-hero.jpg') }}"
                         alt="Pemandangan kawasan pelabuhan Tanjung Mas, Semarang"
-                        class="h-[320px] w-full object-cover sm:h-[380px] lg:h-[410px] xl:h-[440px]"
+                        class="hero-photo h-[320px] w-full object-cover sm:h-[380px] lg:h-[410px] xl:h-[440px]"
                     >
 
                     {{-- Overlay agar teks tetap terbaca --}}
@@ -138,9 +138,9 @@
                 {{-- Statistik dinamis --}}
                 <div class="absolute inset-x-4 bottom-0 grid grid-cols-2 gap-3 sm:inset-x-6">
 
-                    <div class="rounded-2xl border border-white/80 bg-white/95 p-4 shadow-lg backdrop-blur">
-                        <p class="text-2xl font-extrabold text-[#326AAB]">
-                            {{ $totalUmkms }}
+                    <div class="float-soft rounded-2xl border border-white/80 bg-white/95 p-4 shadow-lg backdrop-blur">
+                        <p class="text-2xl font-extrabold text-[#326AAB]" data-count-up="{{ $totalUmkms }}">
+                            {{ number_format($totalUmkms, 0, ',', '.') }}
                         </p>
 
                         <p class="mt-1 text-xs font-medium text-gray-500 sm:text-sm">
@@ -148,9 +148,9 @@
                         </p>
                     </div>
 
-                    <div class="rounded-2xl border border-white/80 bg-white/95 p-4 shadow-lg backdrop-blur">
-                        <p class="text-2xl font-extrabold text-[#326AAB]">
-                            {{ $totalProducts }}
+                    <div class="float-soft-delayed rounded-2xl border border-white/80 bg-white/95 p-4 shadow-lg backdrop-blur">
+                        <p class="text-2xl font-extrabold text-[#326AAB]" data-count-up="{{ $totalProducts }}">
+                            {{ number_format($totalProducts, 0, ',', '.') }}
                         </p>
 
                         <p class="mt-1 text-xs font-medium text-gray-500 sm:text-sm">
@@ -164,7 +164,7 @@
 
             {{-- Keunggulan --}}
             <div class="relative z-10 w-full lg:col-span-2 border-t border-white/70 bg-white/25 px-5 py-7 sm:px-8 lg:px-10">
-                <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
+                <div class="grid grid-cols-2 gap-6 md:grid-cols-4" data-reveal-group>
 
                     {{-- Katalog --}}
                     <div class="px-2 py-2 text-center">
@@ -243,7 +243,7 @@
 {{-- Kategori UMKM --}}
 <section id="kategori" class="mx-auto max-w-7xl px-5 py-14 lg:px-8">
 
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between" data-reveal>
         <div>
             <p class="text-sm font-bold uppercase tracking-wider text-[#326AAB]">
                 Jelajahi
@@ -262,11 +262,11 @@
             href="{{ route('umkm.index') }}"
             class="inline-flex items-center gap-2 text-sm font-semibold text-[#326AAB] transition hover:gap-3"
         >
-            Lihat semua UMKM <span>→</span>
+            Lihat semua UMKM <span class="arrow-nudge" aria-hidden="true">→</span>
         </a>
     </div>
 
-    <div class="mt-7 grid grid-cols-4 gap-x-2 gap-y-4 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-6">
+    <div class="mt-7 grid grid-cols-4 gap-x-2 gap-y-4 sm:gap-4 lg:grid-cols-8" data-reveal-group>
 
         @forelse ($categories as $category)
             <a
@@ -309,7 +309,7 @@
 <section class="mx-auto max-w-7xl px-5 py-14 lg:px-8">
 
     {{-- Section Header --}}
-    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between" data-reveal>
 
         <div>
             <p class="text-sm font-bold uppercase tracking-[0.15em] text-[#326AAB]">
@@ -330,13 +330,13 @@
             class="inline-flex w-fit shrink-0 items-center gap-2 text-sm font-semibold text-[#326AAB] transition hover:gap-3"
         >
             Lihat semua UMKM
-            <span aria-hidden="true">→</span>
+            <span class="arrow-nudge" aria-hidden="true">→</span>
         </a>
 
     </div>
 
     {{-- UMKM Cards --}}
-    <div class="-mx-5 mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
+    <div class="-mx-5 mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3" data-reveal-group>
 
         @forelse ($featuredUmkms as $umkm)
 
@@ -358,24 +358,8 @@
                             >
                         @else
                             <div class="flex h-full w-full flex-col items-center justify-center text-[#326AAB]">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="52"
-                                    height="52"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="1.3"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                >
-                                    <path d="M3 9.5 12 4l9 5.5"/>
-                                    <path d="M5 10v10h14V10"/>
-                                    <path d="M9 20v-6h6v6"/>
-                                </svg>
-
-                                <span class="mt-3 text-sm font-medium">
-                                    Foto UMKM
+                                <span class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/70 shadow-sm transition duration-500 group-hover:scale-110 group-hover:rotate-3 [&_svg]:h-9 [&_svg]:w-9">
+                                    <x-category-icon :category="$umkm->category" />
                                 </span>
                             </div>
                         @endif
@@ -457,7 +441,7 @@
                             class="inline-flex items-center gap-2 rounded-full border border-[#326AAB]/30 px-4 py-2.5 text-sm font-semibold text-[#326AAB] transition hover:border-[#326AAB] hover:bg-[#326AAB] hover:text-white"
                         >
                             Lihat Detail
-                            <span aria-hidden="true">→</span>
+                            <span class="arrow-nudge" aria-hidden="true">→</span>
                         </a>
 
                     </div>
@@ -502,7 +486,7 @@
                         class="mt-5 inline-flex items-center gap-2 font-semibold text-[#326AAB] hover:underline"
                     >
                         Jelajahi katalog
-                        <span aria-hidden="true">→</span>
+                        <span class="arrow-nudge" aria-hidden="true">→</span>
                     </a>
 
                 </div>
@@ -520,7 +504,7 @@
     <div class="mx-auto max-w-7xl px-5 lg:px-8">
 
         {{-- Section Header --}}
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between" data-reveal>
             <div>
                 <p class="text-sm font-bold uppercase tracking-[0.15em] text-[#326AAB]">
                     Produk Lokal
@@ -540,12 +524,12 @@
                 class="inline-flex w-fit shrink-0 items-center gap-2 text-sm font-semibold text-[#326AAB] transition hover:gap-3"
             >
                 Lihat semua produk
-                <span aria-hidden="true">→</span>
+                <span class="arrow-nudge" aria-hidden="true">→</span>
             </a>
         </div>
 
         {{-- Product Cards --}}
-        <div class="mt-8 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
+        <div class="mt-8 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4" data-reveal-group>
 
             @forelse ($latestProducts as $product)
 
@@ -587,7 +571,7 @@
                             class="mt-5 inline-flex items-center gap-2 font-semibold text-[#326AAB] hover:underline"
                         >
                             Lihat katalog UMKM
-                            <span aria-hidden="true">→</span>
+                            <span class="arrow-nudge" aria-hidden="true">→</span>
                         </a>
 
                     </div>
@@ -604,7 +588,7 @@
 {{-- Berita Terbaru --}}
 @if ($latestPosts->isNotEmpty())
     <section class="mx-auto max-w-7xl px-5 py-14 lg:px-8">
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between" data-reveal>
             <div>
                 <p class="text-sm font-bold uppercase tracking-[0.15em] text-[#326AAB]">
                     Kabar Tanjung Mas
@@ -624,11 +608,11 @@
                 class="inline-flex w-fit shrink-0 items-center gap-2 text-sm font-semibold text-[#326AAB] transition hover:gap-3"
             >
                 Semua berita
-                <span aria-hidden="true">&rarr;</span>
+                <span class="arrow-nudge" aria-hidden="true">&rarr;</span>
             </a>
         </div>
 
-        <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
             @foreach ($latestPosts as $post)
                 <x-post-card :post="$post" />
             @endforeach
@@ -638,7 +622,7 @@
 
 
 {{-- Tentang --}}
-<section id="tentang" class="mx-auto max-w-4xl px-5 py-16 text-center">
+<section id="tentang" class="mx-auto max-w-4xl px-5 py-16 text-center" data-reveal>
 
     <p class="text-sm font-bold uppercase tracking-wider text-[#326AAB]">
         Tentang TanjungKatalog

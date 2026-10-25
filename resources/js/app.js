@@ -24,6 +24,74 @@ if (menuButton && mobileMenu) {
     });
 }
 
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const numberFormat = new Intl.NumberFormat('id-ID');
+
+/**
+ * Hitung naik angka statistik dari 0 ke nilai akhirnya.
+ */
+function countUp(element) {
+    const target = Number(element.dataset.countUp);
+
+    if (prefersReducedMotion || !Number.isFinite(target) || target <= 0) {
+        return;
+    }
+
+    const duration = 1200;
+    const startedAt = performance.now();
+
+    const tick = (now) => {
+        const progress = Math.min((now - startedAt) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+
+        element.textContent = numberFormat.format(Math.round(target * eased));
+
+        if (progress < 1) {
+            requestAnimationFrame(tick);
+        }
+    };
+
+    element.textContent = '0';
+    requestAnimationFrame(tick);
+}
+
+window.tanjungMotionStarted = true;
+
+if (document.documentElement.classList.contains('motion-ready') && 'IntersectionObserver' in window) {
+    document.querySelectorAll('[data-reveal-group]').forEach((group) => {
+        [...group.children].forEach((child, index) => {
+            child.setAttribute('data-reveal', '');
+            child.style.setProperty('--reveal-delay', `${(index % 8) * 70}ms`);
+        });
+    });
+
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (!entry.isIntersecting) {
+                return;
+            }
+
+            entry.target.classList.add('is-revealed');
+            revealObserver.unobserve(entry.target);
+        });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.1 });
+
+    document.querySelectorAll('[data-reveal]').forEach((element) => revealObserver.observe(element));
+} else {
+    document.documentElement.classList.remove('motion-ready');
+}
+
+document.querySelectorAll('[data-count-up]').forEach(countUp);
+
+const siteHeader = document.querySelector('[data-site-header]');
+
+if (siteHeader) {
+    const updateHeaderShadow = () => siteHeader.classList.toggle('is-scrolled', window.scrollY > 8);
+
+    updateHeaderShadow();
+    window.addEventListener('scroll', updateHeaderShadow, { passive: true });
+}
+
 document.querySelectorAll('[data-gallery]').forEach((gallery) => {
     const mainImage = gallery.querySelector('[data-gallery-main]');
     const thumbnails = gallery.querySelectorAll('[data-gallery-thumb]');

@@ -19,24 +19,12 @@
                 >
             @else
                 <div class="flex h-full w-full flex-col items-center justify-center text-[#326AAB]">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="44"
-                        height="44"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.4"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <path d="m3 7 9-4 9 4-9 5-9-5Z"/>
-                        <path d="M3 7v10l9 5 9-5V7"/>
-                        <path d="M12 12v10"/>
-                    </svg>
+                    <span class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/70 shadow-sm transition duration-500 group-hover:scale-110 group-hover:rotate-3 [&_svg]:h-7 [&_svg]:w-7">
+                        <x-category-icon :category="$product->umkm->category" />
+                    </span>
 
-                    <span class="mt-2 text-xs font-medium">
-                        Foto produk
+                    <span class="mt-2 px-2 text-center text-xs font-semibold">
+                        {{ $product->umkm->category->name }}
                     </span>
                 </div>
             @endif
@@ -93,7 +81,7 @@
                 class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#326AAB]/25 px-3 py-2.5 text-xs font-semibold text-[#326AAB] transition hover:border-[#326AAB] hover:bg-[#326AAB] hover:text-white sm:text-sm"
             >
                 Lihat Produk
-                <span aria-hidden="true">→</span>
+                <span class="arrow-nudge" aria-hidden="true">→</span>
             </a>
 
         </div>

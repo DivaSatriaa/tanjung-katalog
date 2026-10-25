@@ -36,11 +36,11 @@
             </p>
             <a href="{{ route('product.index') }}" class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#326AAB] hover:underline">
                 Jelajahi katalog produk
-                <span aria-hidden="true">&rarr;</span>
+                <span class="arrow-nudge" aria-hidden="true">&rarr;</span>
             </a>
         </div>
     @else
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
             @foreach ($posts as $post)
                 <x-post-card :post="$post" />
             @endforeach

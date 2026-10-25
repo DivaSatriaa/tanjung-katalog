@@ -29,20 +29,4 @@ trait SeedsImages
 
         return $path;
     }
-
-    /**
-     * Foto galeri tambahan berpola "{prefix}-1.jpg", "{prefix}-2.jpg", dan seterusnya.
-     *
-     * @return array<int, string>
-     */
-    protected function seedGalleryImages(string $prefix): array
-    {
-        $paths = [];
-
-        for ($index = 1; $path = $this->seedImage("{$prefix}-{$index}.jpg"); $index++) {
-            $paths[] = $path;
-        }
-
-        return $paths;
-    }
 }

@@ -43,7 +43,7 @@
             class="mt-auto inline-flex items-center gap-2 pt-5 text-sm font-semibold text-[#326AAB] transition hover:gap-3"
         >
             Baca selengkapnya
-            <span aria-hidden="true">&rarr;</span>
+            <span class="arrow-nudge" aria-hidden="true">&rarr;</span>
         </a>
     </div>
 

@@ -134,7 +134,7 @@
                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-[#326AAB] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#28598f]"
             >
                 Cari UMKM
-                <span aria-hidden="true">→</span>
+                <span class="arrow-nudge" aria-hidden="true">→</span>
             </button>
 
         </form>
@@ -219,7 +219,7 @@
     </div>
 
     {{-- UMKM Grid --}}
-    <div class="mt-7 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="mt-7 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
 
         @forelse ($umkms as $umkm)
 
@@ -246,24 +246,8 @@
 
                             <div class="flex h-full w-full flex-col items-center justify-center text-[#326AAB]">
 
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="48"
-                                    height="48"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="1.4"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                >
-                                    <path d="M3 9.5 12 4l9 5.5"/>
-                                    <path d="M5 10v10h14V10"/>
-                                    <path d="M9 20v-6h6v6"/>
-                                </svg>
-
-                                <span class="mt-3 text-sm font-medium">
-                                    Foto UMKM
+                                <span class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/70 shadow-sm transition duration-500 group-hover:scale-110 group-hover:rotate-3 [&_svg]:h-9 [&_svg]:w-9">
+                                    <x-category-icon :category="$umkm->category" />
                                 </span>
 
                             </div>
@@ -347,7 +331,7 @@
                             class="inline-flex items-center gap-2 rounded-full border border-[#326AAB]/30 px-4 py-2.5 text-sm font-semibold text-[#326AAB] transition hover:border-[#326AAB] hover:bg-[#326AAB] hover:text-white"
                         >
                             Detail
-                            <span aria-hidden="true">→</span>
+                            <span class="arrow-nudge" aria-hidden="true">→</span>
                         </a>
 
                     </div>
